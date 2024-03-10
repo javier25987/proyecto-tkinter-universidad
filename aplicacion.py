@@ -1,13 +1,13 @@
-# ======================================================================================= liberias necesarias
+# ======================================================================================= necessary libraries
 import tkinter as tk
 import turtle as tr
 import math
 
-# =========================================================================================== listado de bugs 
+# ====================================================================================================== bugs
 '''
 se necesita redimencionar imagenes
 '''
-# =================================================================================== definicion de elementos
+# ==================================================================================== definition of elements
 
 width_window = 1000
 height_window = 600
@@ -18,7 +18,7 @@ teta = 0
 force_f = 0
 force_r = 0
 
-# ================================================================= definicion de Functions dentro del codigo
+# =================================================================== definition of functions within the code
 
 def solve_problem(alfa, beta, f):
     alfa = math.radians(alfa)
@@ -168,9 +168,9 @@ class Functions():
         else:
             error = caution()
             error.mainloop()
-# ==================================================================================== definicion de ventanas
+# ========================================================================================= window definition
 
-# ===================================================================== ventana principal
+# ======================================================================== primary window
 
 class firsh_window(tk.Tk, Functions):
     def __init__(self):
@@ -284,7 +284,7 @@ class menu(tk.Tk, Functions):
 
         self.marco_a_3.place(relx=0.022, rely=0, relheight=0.938, relwidth=0.955)
 
-# =================================================================== primera explicacion
+# ===================================================================== first explanation
 
 class expl_1(tk.Tk, Functions):
     def __init__(self):
@@ -310,7 +310,7 @@ class expl_1(tk.Tk, Functions):
         self.button_m = tk.Button(self, text='меню', command=self.go_menu)
         self.button_m.place(rely=0.9, relx=0.1)
 
-# =================================================================== segunda explicacion
+# ==================================================================== second explanation
 
 class expl_2(tk.Tk, Functions):
     def __init__(self):
@@ -333,7 +333,7 @@ class expl_2(tk.Tk, Functions):
         self.button = tk.Button(self, text='предыдущий шаг', command=self.step_1)
         self.button.place(rely=0.9, relx=0.1)
 
-# =================================================================== tercera explicacion
+# ==================================================================== second explanation
 
 class expl_3(tk.Tk, Functions):
     def __init__(self):
@@ -359,7 +359,7 @@ class expl_3(tk.Tk, Functions):
         self.button_m = tk.Button(self, text='посмотреть рисунок', command=draw)
         self.button_m.place(rely=0.5, relx=0.43)
 
-# =============================================================== ventana de congraitacion
+# ================================================================= congratulatory window
 
 class congra(tk.Tk, Functions):
     def __init__(self):
@@ -388,7 +388,7 @@ class congra(tk.Tk, Functions):
         self.button_ce = tk.Button(self,text='закрыть', command=self.close_all)
         self.button_ce.place(rely=0.9, relx=0.1)
 
-# =============================================================== ventana  de caution
+# ======================================================================== warning window
 
 class caution(tk.Tk):
     def __init__(self):
@@ -416,9 +416,7 @@ class caution(tk.Tk):
         self.button = tk.Button(self, text='закрыть', command=self.destroy)
         self.button.pack()
 
-# ========================================================================================= primera ejecucion
-
-#draw()
+# ============================================================================================ warning window
 
 root = firsh_window()
 root.mainloop()
