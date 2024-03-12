@@ -51,10 +51,14 @@ def rectify(s):
     s = s.strip()
     if s == '':
         return False
+    while s[0] == '0':
+        s = s[1:]
     for i in s:
         if i not in rec:
             return False
     if '-' in s:
+        if s.count('-') > 1:
+            return False
         if s[0] != '-':
             return False
     if '.' in s:
@@ -62,14 +66,18 @@ def rectify(s):
             return False
     return True
         
-def draw():
-    t = tr.Turtle()
+class Tortuga():
+    def __init__(self):
+        self.t = tr.Turtle()
 
-    t.screen.mainloop()
+        self.t.screen.mainloop()
 
-class Functions():
+class Functions(Tortuga):
     def __init__(self):
         pass
+
+    def draw(self):
+        Tortuga()
 
     def close_all(self):
         self.destroy()
@@ -116,6 +124,7 @@ class Functions():
         
         if rectify(str(self.input_alfa.get())):
             alfa = float(self.input_alfa.get())
+            print(rectify(str(self.input_alfa.get())), alfa)
             count_1 += 1
 
         if rectify(str(self.input_beta.get())):
@@ -142,14 +151,15 @@ class Functions():
             if 0 < beta < 90:
                 valuar = True
         else:
-            if ((beta-alfa) < 0) and (0 < beta):
+            if (beta < alfa) and (0 < beta):
                 valuar = True
         
+
         if valuar:
+            print(count_1, count_2)
             if (count_1 + count_2) == 5:
                 forcer, t_ta = solve_problem(alfa, beta, force_f)
                 if (forcer == force_r) and (t_ta == teta):
-                    
                     self.destroy()
                     congra_v = congra()
                     congra_v.mainloop()
@@ -185,6 +195,7 @@ class firsh_window(tk.Tk, Functions):
         y = (height_screen - height_window) // 2
 
         self.geometry(f'{width_window}x{height_window}+{x}+{y}')
+        #self.attributes('-fullscreen', True)
         self.title('главное окно')
 
         self.img = tk.PhotoImage(file='imagen.png')
@@ -209,6 +220,7 @@ class menu(tk.Tk, Functions):
         y = (height_screen - height_window) // 2
 
         self.geometry(f'{width_window}x{height_window}+{x}+{y}')
+        #root.state("zoomed")
         self.title('меню')
 
         self.marco_1 = tk.Frame(self)
@@ -218,13 +230,13 @@ class menu(tk.Tk, Functions):
         self.input_alfa = tk.Entry(self.marco_a_1, font='calibri 20')
         self.input_alfa.place(rely=0, relx=0.133, relwidth=0.08, relheight=1)
 
-        self.l_alfa = tk.Label(self.marco_a_1, text=f'{chr(945)}=', font='calibri 25')
+        self.l_alfa = tk.Label(self.marco_a_1, text=f'{chr(945)}{chr(176)}=', font='calibri 25')
         self.l_alfa.place(rely=0, relx=0.088, relheight=1, relwidth=0.044)
 
         self.input_beta = tk.Entry(self.marco_a_1, font='calibri 20')
         self.input_beta.place(rely=0, relx=0.302, relwidth=0.08, relheight=1)
 
-        self.l_beta = tk.Label(self.marco_a_1, text=f'{chr(946)}=', font='calibri 25')
+        self.l_beta = tk.Label(self.marco_a_1, text=f'{chr(946)}{chr(176)}=', font='calibri 25')
         self.l_beta.place(rely=0, relx=0.257, relheight=1, relwidth=0.044)
 
         self.input_force_f = tk.Entry(self.marco_a_1, font='calibri 20')
@@ -242,7 +254,7 @@ class menu(tk.Tk, Functions):
         self.input_teta = tk.Entry(self.marco_a_1, font='calibri 20')
         self.input_teta.place(rely=0, relx=0.835, relwidth=0.08, relheight=1)
 
-        self.l_teta = tk.Label(self.marco_a_1, text=f'{chr(952)}=', font='calibri 25')
+        self.l_teta = tk.Label(self.marco_a_1, text=f'{chr(952)}{chr(176)}=', font='calibri 25')
         self.l_teta.place(rely=0, relx=0.791, relheight=1, relwidth=0.044)
 
         self.marco_1.place(relx=0, rely=0, relheight=0.2, relwidth=1)
@@ -257,7 +269,7 @@ class menu(tk.Tk, Functions):
         self.button_ro.place(rely=0, relx=0.473, relheight=1)
 
         self.button_p = tk.Button(self.marco_2, text='prueva boton', command=self.step_1)
-        #self.button_p.pack()
+        self.button_p.pack()
 
         self.button_f = tk.Button(self.marco_2, text='felcitar', command=self.congratulate)
         #self.button_f.pack()
@@ -299,10 +311,15 @@ class expl_1(tk.Tk, Functions):
         y = (height_screen - height_window) // 2
 
         self.geometry(f'{width_window}x{height_window}+{x}+{y}')
+        #self.attributes('-fullscreen', True)
         self.title('шаг_1')
 
-        self.label = tk.Label(self, text=f'valor de alfa {str(alfa)}')
-        self.label.pack()
+        self.marco_1 = tk.Frame(self)
+
+        self.titulo = tk.Label(self.marco_1, text='1. вычислять силы', font='calibri 18')
+        self.titulo.pack()
+
+        self.marco_1.place(relx=0,rely=0, relwidth=1, relheight=0.111)
 
         self.button = tk.Button(self, text='следующий шаг', command=self.step_2)
         self.button.place(rely=0.9, relx=0.8)
@@ -325,6 +342,7 @@ class expl_2(tk.Tk, Functions):
         y = (height_screen - height_window) // 2
 
         self.geometry(f'{width_window}x{height_window}+{x}+{y}')
+        #self.attributes('-fullscreen', True)
         self.title('шаг_2')
 
         self.button = tk.Button(self, text='следующий шаг', command=self.step_3)
@@ -348,6 +366,7 @@ class expl_3(tk.Tk, Functions):
         y = (height_screen - height_window) // 2
 
         self.geometry(f'{width_window}x{height_window}+{x}+{y}')
+        #self.attributes('-fullscreen', True)
         self.title('шаг_3')
 
         self.button = tk.Button(self, text='меню', command=self.go_menu)
@@ -356,7 +375,7 @@ class expl_3(tk.Tk, Functions):
         self.button = tk.Button(self, text='предыдущий шаг', command=self.step_2)
         self.button.place(rely=0.9, relx=0.1)
 
-        self.button_m = tk.Button(self, text='посмотреть рисунок', command=draw)
+        self.button_m = tk.Button(self, text='посмотреть рисунок', command=self.draw)
         self.button_m.place(rely=0.5, relx=0.43)
 
 # ================================================================= congratulatory window
@@ -379,7 +398,7 @@ class congra(tk.Tk, Functions):
         self.label = tk.Label(self, text='Поздравляем. Все параметры верны.')
         self.label.pack()
 
-        self.button_m = tk.Button(self, text='посмотреть рисунок', command=draw)
+        self.button_m = tk.Button(self, text='посмотреть рисунок', command=self.draw)
         self.button_m.place(rely=0.5, relx=0.43)
 
         self.button_m = tk.Button(self, text='меню', command=self.go_menu)
@@ -398,7 +417,7 @@ class caution(tk.Tk):
         height_screen = self.winfo_screenheight()
 
         width_window = 300
-        height_window = 100
+        height_window = 300
 
         x = (width_screen - width_window) // 2
         y = (height_screen - height_window) // 2
@@ -407,8 +426,20 @@ class caution(tk.Tk):
         self.title('предупреждение')
 
         mensaje = '''
-параметры неверны, пожалуйста, 
-введите их еще раз'''
+параметры неправильные, следующие 
+настройки должны быть выполнены:\n
+'''
+        mensaje += f'   пробел {chr(945)}{chr(176)} является пустым.\n'
+        mensaje += f'   пробел {chr(946)}{chr(176)} является пустым.\n'
+        mensaje += f'   пробел F является пустым.\n'
+        mensaje += f'   пробел R является пустым.\n'
+        mensaje += f'   пробел {chr(952)}{chr(176)} является пустым.\n'
+        mensaje += f'   0 < {chr(945)}{chr(176)} < 90.\n'
+        mensaje += f'   0 < {chr(946)}{chr(176)} < 90.\n'
+        mensaje += f'   {chr(945)}{chr(176)} > {chr(946)}{chr(176)}.\n'
+        
+
+        mensaje += 'пожалуйста, вновь ввести параметры.'
 
         self.label = tk.Label(self, text=mensaje)
         self.label.pack()
