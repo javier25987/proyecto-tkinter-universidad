@@ -306,7 +306,7 @@ class menu(tk.Tk, Functions):
         self.button_ro.place(rely=0, relx=0.473, relheight=1)
 
         self.button_p = tk.Button(self, text='prueva boton', command=self.step_1)
-        self.button_p.pack()
+        #self.button_p.pack()
 
         self.button_f = tk.Button(self.marco_2, text='felcitar', command=self.congratulate)
         #self.button_f.pack()
@@ -579,7 +579,6 @@ class caution(tk.Tk):
 
         self.button = tk.Button(self, text='закрыть', command=self.destroy, font='calibri 13')
         self.button.pack()
-        #self.button.place(relx=0.394, rely=0.85)
 
 # ============================================================================================ warning window
 
