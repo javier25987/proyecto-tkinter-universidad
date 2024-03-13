@@ -83,6 +83,9 @@ class Functions(Tortuga):
     def draw(self):
         Tortuga()
 
+    def funcion_n(self):
+        pass
+
     def close_all(self):
         self.destroy()
 
@@ -220,12 +223,30 @@ class firsh_window(tk.Tk, Functions):
 
         self.title('главное окно')
 
-        self.img = tk.PhotoImage(file='imagen.png')
-        self.label1 = tk.Label(self, image=self.img)
-        self.label1.pack()
+        self.marco_1 = tk.Frame(self)
 
-        self.button = tk.Button(self, text='меню', command=self.go_menu)
-        self.button.pack()
+        text_problem = '''Однородный стержень AB прикреплен к вертикальной
+стене  посредством  шарнира  A и удерживается под 
+углом 60° к вертикали при помощи троса BC,
+образующего с ним угол 30°. Определить величину 
+и направление реакции R шарнира, если известно, 
+что вес стержня равен 20 Н.'''
+
+        self.label = tk.Label(self.marco_1, text=text_problem, font='calibri 17')
+        self.label.place(relx=0.016, rely=0.1)
+
+        self.button = tk.Button(self.marco_1, text='начинать', command=self.go_menu, font='calibri 20')
+        self.button.place(relx=0.388, rely=0.5)
+
+        self.marco_1.place(relx=0, rely=0, relheight=1, relwidth=0.555)
+
+        self.marco_2 = tk.Frame(self)
+
+        self.img = tk.PhotoImage(file='imagen_firsh_window.png')
+        self.label1 = tk.Label(self.marco_2, image=self.img)
+        self.label1.place(relx=0.044, rely=0.04)
+
+        self.marco_2.place(relx=0.555, rely=0, relheight=1, relwidth=0.444)
 
 # ================================================================================== menu
 
@@ -284,8 +305,8 @@ class menu(tk.Tk, Functions):
         self.button_ro = tk.Button(self.marco_a_2, text='условие', command=self.root, font='calibri 18')
         self.button_ro.place(rely=0, relx=0.473, relheight=1)
 
-        self.button_p = tk.Button(self.marco_2, text='prueva boton', command=self.step_1)
-        #self.button_p.pack()
+        self.button_p = tk.Button(self, text='prueva boton', command=self.step_1)
+        self.button_p.pack()
 
         self.button_f = tk.Button(self.marco_2, text='felcitar', command=self.congratulate)
         #self.button_f.pack()
@@ -333,7 +354,46 @@ class expl_1(tk.Tk, Functions):
 
         self.marco_2 = tk.Frame(self)
 
-        self.marco_2.place(relx=0,rely=0.111, relwidth=1, relheight=0.712)
+        self.marco_2_1 = tk.Frame(self.marco_2, bg='white')
+
+        self.marco_2_1.place(relx=0.044, rely=0, relwidth=0.322, relheight=1)
+
+        self.marco_2_2 = tk.Frame(self.marco_2)
+
+        text_1 = '''Чтобы найти R, мы должны построить диаграмму всех сил, чтобы знать,
+какие силы необходимы для получения результата.'''
+
+        text_2 = '''мы видим, что R может быть найдено, если мы знаем компоненты Rx и
+Ry, поэтому мы приступаем к их получению.'''
+
+        text_3 = '''Теперь мы сталкиваемся с проблемой, что нам неизвестны значения
+P и ȹ, поэтому мы приступаем к их поиску, ȹ можно найти с помощью 
+диаграммы, а P - с помощью момента в точке A (перейдите к 
+следующему шагу).'''
+
+        self.label_1 = tk.Label(self.marco_2_2, text=text_1, font='calibri 13')
+        self.label_1.pack()
+
+        self.imagen_1 = tk.PhotoImage(file='nochanged_imagen_1.png')
+        self.label_img_1 = tk.Label(self.marco_2_2, image=self.imagen_1)
+        self.label_img_1.pack()
+
+        self.label_2 = tk.Label(self.marco_2_2, text=text_2, font='calibri 13')
+        self.label_2.pack()
+
+        self.imagen_2 = tk.PhotoImage(file='nochanged_imagen_2.png')
+        self.label_img_2 = tk.Label(self.marco_2_2, image=self.imagen_2)
+        self.label_img_2.pack()
+
+        self.label_3 = tk.Label(self.marco_2_2, text=text_3, font='calibri 13')
+        self.label_3.pack()
+
+        self.marco_img_2 = tk.Frame(self.marco_2_2, bg='white')
+        self.marco_img_2.place(relx=0.307, rely=0.71, relheight=0.284, relwidth=0.384)
+
+        self.marco_2_2.place(relx=0.377, rely=0, relwidth=0.577, relheight=1)
+
+        self.marco_2.place(relx=0, rely=0.111, relwidth=1, relheight=0.712)
 
         self.marco_3 = tk.Frame(self)
 
@@ -457,17 +517,14 @@ class caution(tk.Tk):
         width_screen = self.winfo_screenwidth()
         height_screen = self.winfo_screenheight()
 
-        width_window = 320
-        height_window = 310
+        required_width = self.winfo_reqwidth() + 120
+        required_height = self.winfo_reqheight()
 
-        x = (width_screen - width_window) // 2
-        y = (height_screen - height_window) // 2
+        x = (width_screen - required_width) // 2
+        y = (height_screen - required_height) // 2
 
-        self.geometry(f'{width_window}x{height_window}+{x}+{y}')
+        self.geometry(f'{required_width}x{required_height}+{x}+{y}')
         self.title('предупреждение')
-
-        #mensaje += f'   пробел R является пустым.\n'
-        #mensaje += f'   пробел {chr(952)}{chr(176)} является пустым.\n'
 
         s_rect = '0123456789.-'
 
@@ -502,14 +559,14 @@ class caution(tk.Tk):
 
         if rectify(rect_alfa) and rectify(rect_beta):
             if not 0 < alfa < 180:
-                mensaje += f'   0 < {chr(945)}{chr(176)} < 90.\n'
+                mensaje += f'    0 < {chr(945)}{chr(176)} < 90.\n'
 
             if alfa == 90:
                 if not 0 < beta < 90:
                     mensaje += f'   0 < {chr(946)}{chr(176)} < 90.\n'
             else:
                 if not 0 < beta < alfa:
-                    mensaje += f'   0 < {chr(946)}{chr(176)} < {chr(945)}{chr(176)}'
+                    mensaje += f'   0 < {chr(946)}{chr(176)} < {chr(945)}{chr(176)}\n'
 
         if rectify(rect_f):
             if force_f < 0:
