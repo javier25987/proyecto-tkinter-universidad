@@ -48,7 +48,7 @@ def solve_problem(alfa, beta, f):
     r = round(math.sqrt(r_x**2 + r_y**2), 2)
     teta = round(math.degrees(math.acos(r_y/r)), 2)
 
-    return r, teta
+    return r, teta, r_x, r_y
 
 def rectify(s):
     rec = '0123456789.-'
@@ -84,7 +84,7 @@ class Functions(Tortuga):
         Tortuga()
 
     def funcion_n(self):
-        pass
+        print(caution)
 
     def close_all(self):
         self.destroy()
@@ -188,8 +188,9 @@ class Functions(Tortuga):
             valuar = False
 
         if valuar:
+            print(f'alfa = {alfa}, valuar = {valuar}')
             if (count_1 + count_2) == 5:
-                forcer, t_ta = solve_problem(alfa, beta, force_f)
+                forcer, t_ta, _, _ = solve_problem(alfa, beta, force_f)
                 condition_1 = (round(forcer, ndigits=1) == round(force_r, ndigits=1))
                 condition_2 = (round(t_ta, ndigits=1) == round(teta, ndigits=1))
                 if  condition_1 and condition_2:
@@ -267,13 +268,13 @@ class menu(tk.Tk, Functions):
         self.input_alfa = tk.Entry(self.marco_a_1, font='calibri 20')
         self.input_alfa.place(rely=0, relx=0.133, relwidth=0.08, relheight=1)
 
-        self.l_alfa = tk.Label(self.marco_a_1, text=f'{chr(945)}{chr(176)}=', font='calibri 25')
+        self.l_alfa = tk.Label(self.marco_a_1, text=f'α°=', font='calibri 25')
         self.l_alfa.place(rely=0, relx=0.088, relheight=1, relwidth=0.044)
 
         self.input_beta = tk.Entry(self.marco_a_1, font='calibri 20')
         self.input_beta.place(rely=0, relx=0.302, relwidth=0.08, relheight=1)
 
-        self.l_beta = tk.Label(self.marco_a_1, text=f'{chr(946)}{chr(176)}=', font='calibri 25')
+        self.l_beta = tk.Label(self.marco_a_1, text=f'β°=', font='calibri 25')
         self.l_beta.place(rely=0, relx=0.257, relheight=1, relwidth=0.044)
 
         self.input_force_f = tk.Entry(self.marco_a_1, font='calibri 20')
@@ -291,7 +292,7 @@ class menu(tk.Tk, Functions):
         self.input_teta = tk.Entry(self.marco_a_1, font='calibri 20')
         self.input_teta.place(rely=0, relx=0.835, relwidth=0.08, relheight=1)
 
-        self.l_teta = tk.Label(self.marco_a_1, text=f'{chr(952)}{chr(176)}=', font='calibri 25')
+        self.l_teta = tk.Label(self.marco_a_1, text=f'θ°=', font='calibri 25')
         self.l_teta.place(rely=0, relx=0.791, relheight=1, relwidth=0.044)
 
         self.marco_1.place(relx=0, rely=0, relheight=0.2, relwidth=1)
@@ -306,9 +307,9 @@ class menu(tk.Tk, Functions):
         self.button_ro.place(rely=0, relx=0.473, relheight=1)
 
         self.button_p = tk.Button(self, text='prueva boton', command=self.step_1)
-        #self.button_p.pack()
+        self.button_p.pack()
 
-        self.button_f = tk.Button(self.marco_2, text='felcitar', command=self.congratulate)
+        self.button_f = tk.Button(self, text='felcitar', command=self.funcion_n)
         #self.button_f.pack()
 
         self.button_ca = tk.Button(self.marco_a_2, text='вычислять', command=self.calculate, font='calibri 18')
@@ -389,6 +390,9 @@ P и ȹ, поэтому мы приступаем к их поиску, ȹ мо�
         self.label_3.pack()
 
         self.marco_img_2 = tk.Frame(self.marco_2_2, bg='white')
+
+        # espacio para nuevos witgets 
+
         self.marco_img_2.place(relx=0.307, rely=0.71, relheight=0.284, relwidth=0.384)
 
         self.marco_2_2.place(relx=0.377, rely=0, relwidth=0.577, relheight=1)
@@ -426,6 +430,38 @@ class expl_2(tk.Tk, Functions):
 
         self.marco_2 = tk.Frame(self)
 
+        self.marco_2_1 = tk.Frame(self.marco_2, bg='white')
+
+        self.marco_2_1.place(relx=0.05, rely=0, relheight=1, relwidth=0.5)
+
+        self.marco_2_2 = tk.Frame(self.marco_2)
+
+        text_1 = '''С помощью диаграммы мы можем получить 
+момент в точке A.'''
+
+        text_2 = 'Теперь мы можем узнать из M значение P'
+
+        text_3 = ''' Получив значение P, мы можем перейти к 
+последнему шагу, которыйзаключается 
+в нахождении R и θ.'''
+
+        self.label_1 = tk.Label(self.marco_2_2, text=text_1, font='calibri 13')
+        self.label_1.pack()
+
+        self.marco_img_1 = tk.Frame(self.marco_2_2, bg='white')
+        self.marco_img_1.pack(ipadx=150, ipady=40)
+
+        self.label_2 = tk.Label(self.marco_2_2, text=text_2, font='calibri 13')
+        self.label_2.pack()
+
+        self.marco_img_2 = tk.Frame(self.marco_2_2, bg='white')
+        self.marco_img_2.pack(ipadx=150, ipady=95)
+
+        self.label_3 = tk.Label(self.marco_2_2, text=text_3, font='calibri 13')
+        self.label_3.pack()
+
+        self.marco_2_2.place(relx=0.6, rely=0, relheight=1, relwidth=0.35)
+
         self.marco_2.place(relx=0,rely=0.111, relwidth=1, relheight=0.712)
 
         self.marco_3 = tk.Frame(self)
@@ -459,8 +495,30 @@ class expl_3(tk.Tk, Functions):
 
         self.marco_2 = tk.Frame(self)
 
-        self.button_m = tk.Button(self.marco_2, text='посмотреть рисунок', command=self.draw, font='calibri 18')
-        self.button_m.place(rely=0.5, relx=0.43)
+        self.marco_2_1 = tk.Frame(self.marco_2, bg='red')
+
+        text_1 = '''Взяв значения P и ȹ, вспомнив формулы Rx и Ry, заменим их и получим результирующую силу.'''
+
+        self.label_1 = tk.Label(self.marco_2_1, text=text_1, font='calibri 13')
+        self.label_1.place(relx=0, rely=0)
+
+        self.marco_2_1.place(relx=0.055, rely=0, relheight=0.315, relwidth=0.888)
+
+        self.marco_2_2 = tk.Frame(self.marco_2, bg='red')
+
+        text_2 = 'С помощью теоремы Пифагора и решения θ получаем следующие формулы, в которые можно подставить значения R и θ.'
+
+        self.label_2 = tk.Label(self.marco_2_2, text=text_2, font='calibri 13')
+        self.label_2.place(relx=0, rely=0)
+
+        self.marco_2_2.place(relx=0.055, rely=0.341, relheight=0.315, relwidth=0.9)
+
+        self.marco_2_3 = tk.Frame(self.marco_2)
+
+        self.button_m = tk.Button(self.marco_2_3, text='посмотреть рисунок', command=self.draw, font='calibri 18')
+        self.button_m.place(relx=0.375, rely=0.3)
+
+        self.marco_2_3.place(relx=0.055, rely=0.682, relheight=0.315, relwidth=0.888)
 
         self.marco_2.place(relx=0,rely=0.111, relwidth=1, relheight=0.712)
 
@@ -534,16 +592,28 @@ class caution(tk.Tk):
 '''
 
         if rect_alfa == '':
-            mensaje += f'   пробел {chr(945)}{chr(176)} является пустым.\n'
+            mensaje += f'   пробел α° является пустым.\n'
         else:
+            if '-' in rect_alfa:
+                if rect_alfa.count('-') > 1 or rect_alfa[0] != '-':
+                    mensaje += f'   el simbolo - no esta bien en α°\n'
+            if '.' in rect_alfa:
+                if rect_alfa.count('.') > 1:
+                    mensaje += f'   el simbolo . no esta bien en α°\n'
             for i in rect_alfa:
                 if i not in s_rect:
                     mensaje += f'    hay simbolos extra;os en alfa\n'
                     break
         
         if rect_beta == '':
-            mensaje += f'   пробел {chr(946)}{chr(176)} является пустым.\n'
+            mensaje += f'   пробел β° является пустым.\n'
         else:
+            if '-' in rect_beta:
+                if rect_beta.count('-') > 1 or rect_beta[0] != '-':
+                    mensaje += f'   el simbolo - no esta bien en β°\n'
+            if '.' in rect_beta:
+                if rect_beta.count('.') > 1:
+                    mensaje += f'   el simbolo . no esta bien en β°\n'
             for i in rect_beta:
                 if i not in s_rect:
                     mensaje += f'    hay simbolos extra;os en beta\n'
@@ -552,21 +622,27 @@ class caution(tk.Tk):
         if rect_f == '':
             mensaje += f'   пробел F является пустым.\n'
         else:
+            if '-' in rect_f:
+                if rect_f.count('-') > 1 or rect_f[0] != '-':
+                    mensaje += f'   el simbolo - no esta bien en F\n'
+            if '.' in rect_f:
+                if rect_f.count('.') > 1:
+                    mensaje += f'   el simbolo . no esta bien en F\n'
             for i in rect_f:
                 if i not in s_rect:
-                    mensaje += f'    hay simbolos extra;os en f\n'
+                    mensaje += f'    hay simbolos extra;os en F\n'
                     break
 
         if rectify(rect_alfa) and rectify(rect_beta):
             if not 0 < alfa < 180:
-                mensaje += f'    0 < {chr(945)}{chr(176)} < 90.\n'
+                mensaje += f'    0 < α° < 90°.\n'
 
             if alfa == 90:
                 if not 0 < beta < 90:
-                    mensaje += f'   0 < {chr(946)}{chr(176)} < 90.\n'
+                    mensaje += f'   0 < β° < 90°.\n'
             else:
                 if not 0 < beta < alfa:
-                    mensaje += f'   0 < {chr(946)}{chr(176)} < {chr(945)}{chr(176)}\n'
+                    mensaje += f'   0 < β° < α°\n'
 
         if rectify(rect_f):
             if force_f < 0:
@@ -582,5 +658,6 @@ class caution(tk.Tk):
 
 # ============================================================================================ warning window
 
-root = firsh_window()
-root.mainloop()
+if __name__ == '__main__':
+    root = firsh_window()
+    root.mainloop()
