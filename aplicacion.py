@@ -71,12 +71,6 @@ def rectify(s):
             return False
     return True
         
-class Tortuga():
-    def __init__(self):
-        self.t = tr.Turtle()
-
-        self.t.screen.mainloop()
-
 def error_window():
     global alfa, beta, force_f, rect_alfa, rect_beta, rect_f
     s_rect = '0123456789.-'
@@ -148,11 +142,17 @@ def error_window():
             mensage += f'>  0 < F\n'
     
     if count > 0:
-        mensage += f'>  solo los simbolos {s_rect} estan permitidos\n'
+        mensage += f'>  в использовании допустимы только эти символы {s_rect}\n'
             
     mensage += 'пожалуйста, введите параметры снова.'
 
     tkm.showwarning(message=mensage,title='предупреждение')
+
+class Tortuga():
+    def __init__(self):
+        self.t = tr.Turtle()
+
+        self.t.screen.mainloop()
 
 class Functions(Tortuga):
     def __init__(self):
@@ -261,8 +261,8 @@ class Functions(Tortuga):
         if valuar:
             if (count_1 + count_2) == 5:
                 forcer, t_ta, _, _ = solve_problem(alfa, beta, force_f)
-                condition_1 = (round(forcer, ndigits=1) == round(force_r, ndigits=1))
-                condition_2 = (round(t_ta, ndigits=1) == round(teta, ndigits=1))
+                condition_1 = (round(forcer, ndigits=2) == round(force_r, ndigits=2))
+                condition_2 = (round(t_ta, ndigits=2) == round(teta, ndigits=2))
                 if  condition_1 and condition_2:
                     self.destroy()
                     congra_v = congra()
@@ -333,6 +333,12 @@ class menu(tk.Tk, Functions):
 
         self.marco_a_1 = tk.Frame(self.marco_1)
 
+        self.label_input = tk.Label(self, text='даны параметры', font='calibri 20')
+        self.label_input.place(relx=0.085, rely=0.04)
+
+        self.label_get = tk.Label(self, text='ваш ответ', font='calibri 20')
+        self.label_get.place(relx=0.625, rely=0.04)
+
         self.input_alfa = tk.Entry(self.marco_a_1, font='calibri 20')
         self.input_alfa.place(rely=0, relx=0.133, relwidth=0.08, relheight=1)
 
@@ -365,7 +371,7 @@ class menu(tk.Tk, Functions):
 
         self.marco_1.place(relx=0, rely=0, relheight=0.2, relwidth=1)
 
-        self.marco_a_1.place(rely=0.45, relx=0, relwidth=1, relheight=0.259)
+        self.marco_a_1.place(rely=0.65, relx=0, relwidth=1, relheight=0.259)
 
         self.marco_2 = tk.Frame(self)
 
@@ -374,19 +380,13 @@ class menu(tk.Tk, Functions):
         self.button_ro = tk.Button(self.marco_a_2, text='условие', command=self.root, font='calibri 18')
         self.button_ro.place(rely=0, relx=0.473, relheight=1)
 
-        self.button_p = tk.Button(self, text='prueva boton', command=self.step_1)
-        self.button_p.pack()
-
-        self.button_f = tk.Button(self, text='felcitar', command=self.congratulate)
-        #self.button_f.pack()
-
         self.button_ca = tk.Button(self.marco_a_2, text='вычислить', command=self.calculate, font='calibri 18')
         self.button_ca.place(rely=0, relx=0.8, relheight=1)
 
         self.button_ce = tk.Button(self.marco_a_2, text='закрыть', command=self.close_all, font='calibri 18')
         self.button_ce.place(rely=0, relx=0.1, relheight=1)
 
-        self.marco_2.place(rely=0.2, relx=0, relheight=0.2, relwidth=1)
+        self.marco_2.place(rely=0.25, relx=0, relheight=0.2, relwidth=1)
 
         self.marco_a_2.place(rely=0.15, relx=0, relheight=0.296, relwidth=1)
 
@@ -425,11 +425,6 @@ class expl_1(tk.Tk, Functions):
 
         self.marco_2_1 = tk.Frame(self.marco_2, bg='white')
 
-        self.label_prueva = tk.Label(self.marco_2_1, text=f'X: Rₓ = F·cos({chr(966)}{chr(8306)}) = 0', font='courier 18 italic')
-        self.label_prueva.pack()
-
-        print(f'X: Rₓ = F cos({chr(981)}) = 0')
-
         self.marco_2_1.place(relx=0.044, rely=0, relwidth=0.322, relheight=1)
 
         self.marco_2_2 = tk.Frame(self.marco_2)
@@ -448,25 +443,29 @@ P и ȹ, поэтому мы приступаем к их поиску, ȹ мо�
         self.label_1 = tk.Label(self.marco_2_2, text=text_1, font='calibri 13')
         self.label_1.pack()
 
-        self.imagen_1 = tk.PhotoImage(file='nochanged_imagen_1.png')
-        self.label_img_1 = tk.Label(self.marco_2_2, image=self.imagen_1)
-        self.label_img_1.pack()
+        eq_1 = f'X: Rₓ + P·cos({chr(966)}) = 0 \nY: Rᵧ - F + P·sin({chr(966)}) = 0'
+
+        self.label_eq_1 = tk.Label(self.marco_2_2, text=eq_1, font='courier 18 italic')
+        self.label_eq_1.pack()
 
         self.label_2 = tk.Label(self.marco_2_2, text=text_2, font='calibri 13')
         self.label_2.pack()
 
-        self.imagen_2 = tk.PhotoImage(file='nochanged_imagen_2.png')
-        self.label_img_2 = tk.Label(self.marco_2_2, image=self.imagen_2)
-        self.label_img_2.pack()
+        eq_2 = f'Rₓ = -P·cos({chr(966)}) \nRᵧ = F - P·sin({chr(966)})'
+
+        self.label_eq_2 = tk.Label(self.marco_2_2, text=eq_2, font='courier 18 italic')
+        self.label_eq_2.pack()
 
         self.label_3 = tk.Label(self.marco_2_2, text=text_3, font='calibri 13')
         self.label_3.pack()
 
-        self.marco_img_2 = tk.Frame(self.marco_2_2, bg='white')
-
-        # espacio para nuevos witgets 
-
-        self.marco_img_2.place(relx=0.307, rely=0.71, relheight=0.284, relwidth=0.384)
+        if alfa == 90:
+            eq_n = f'{chr(966)} = 180 - β'
+        else:
+            eq_n = f'{chr(966)} = 90 + α - β'
+            
+        self.label_eq_n = tk.Label(self.marco_2_2, text=eq_n, font='courier 18 italic')
+        self.label_eq_n.pack()
 
         self.marco_2_2.place(relx=0.377, rely=0, relwidth=0.577, relheight=1)
 
@@ -521,19 +520,29 @@ class expl_2(tk.Tk, Functions):
         self.label_1 = tk.Label(self.marco_2_2, text=text_1, font='calibri 13')
         self.label_1.pack()
 
-        self.marco_img_1 = tk.Frame(self.marco_2_2, bg='white')
-        self.marco_img_1.pack(ipadx=150, ipady=40)
+        if alfa == 90:
+            eq_1 = f'Mₐ: 0.5·l·F+l·P·cos(-(90+β)) = 0'
+            eq_2 = f'0.5·F + P·cos(90+β) = 0 \nP·cos(90+β) = -0.5·F \nP = -F/(2·cos(90+β))'
+        elif alfa < 90:
+            eq_1 = f'Mₐ: 0.5·l·F·cos(-δ₆)+l·P·cos(-(90+β)) = 0'
+            eq_2 = f'0.5·F·cos(δ₆)+P·cos(90+β) = 0 \nP·cos(90+β) = -0.5·F·cos(δ₆) \nP = (-F·cos(δ₆))/(2·cos(90+β)) \nδ₆ = 90 - α'
+        elif alfa > 90:
+            eq_1 = f'Mₐ: 0.5·l·F·cos(δ₅)+l·P·cos(-(90+β)) = 0'
+            eq_2 = f'0.5·F·cos(δ₅) + P·cos(90+β) = 0 \nP·cos(90+β) = -0.5·F·cos(δ₅) \nP = (-F·cos(δ₅))/(2·cos(90+β)) \nδ₅ = α - 90'
+
+        self.label_eq_1 = tk.Label(self.marco_2_2, text=eq_1, font='courier 15 italic')
+        self.label_eq_1.pack()
 
         self.label_2 = tk.Label(self.marco_2_2, text=text_2, font='calibri 13')
         self.label_2.pack()
 
-        self.marco_img_2 = tk.Frame(self.marco_2_2, bg='white')
-        self.marco_img_2.pack(ipadx=150, ipady=95)
+        self.label_eq_2 = tk.Label(self.marco_2_2, text=eq_2, font='courier 18 italic')
+        self.label_eq_2.pack()
 
         self.label_3 = tk.Label(self.marco_2_2, text=text_3, font='calibri 13')
         self.label_3.pack()
 
-        self.marco_2_2.place(relx=0.6, rely=0, relheight=1, relwidth=0.35)
+        self.marco_2_2.place(relx=0.5, rely=0, relheight=1, relwidth=0.5)
 
         self.marco_2.place(relx=0,rely=0.111, relwidth=1, relheight=0.712)
 
@@ -559,6 +568,8 @@ class expl_3(tk.Tk, Functions):
 
         self.title('шаг_3')
 
+        r, t_ta, r_x, r_y = solve_problem(alfa, beta, force_f)
+
         self.marco_1 = tk.Frame(self)
 
         self.titulo = tk.Label(self.marco_1, text='3. вычислять R и θ', font='calibri 23')
@@ -568,21 +579,35 @@ class expl_3(tk.Tk, Functions):
 
         self.marco_2 = tk.Frame(self)
 
-        self.marco_2_1 = tk.Frame(self.marco_2, bg='red')
+        self.marco_2_1 = tk.Frame(self.marco_2)
 
-        text_1 = '''Взяв значения P и ȹ, вспомнив формулы Rx и Ry, заменим их и получим результирующую силу.'''
+        text_1 = 'Взяв значения P и ȹ, вспомнив формулы Rx и Ry, заменим их и получим результирующую силу.'
+
+        eq_1 = f'Rₓ = -P·cos({chr(966)}) = {r_x:.2f}      Rᵧ = F - P·sin({chr(966)}) = {r_y:.2f}'
 
         self.label_1 = tk.Label(self.marco_2_1, text=text_1, font='calibri 13')
         self.label_1.place(relx=0, rely=0)
 
+        self.label_eq_1 = tk.Label(self.marco_2_1, text=eq_1, font='courier 18 italic')
+        self.label_eq_1.place(relx=0.097, rely=0.45)
+
         self.marco_2_1.place(relx=0.055, rely=0, relheight=0.315, relwidth=0.888)
 
-        self.marco_2_2 = tk.Frame(self.marco_2, bg='red')
+        self.marco_2_2 = tk.Frame(self.marco_2)
 
         text_2 = 'С помощью теоремы Пифагора и решения θ получаем следующие формулы, в которые можно подставить значения R и θ.'
 
+        eq_2 = f'R² = Rₓ² + Rᵧ² \nR = {r:.2f}'
+        eq_3 = f'cos(θ) = Rₓ/R \nθ = arcos(Rₓ/R) = {t_ta:.2f}'
+
         self.label_2 = tk.Label(self.marco_2_2, text=text_2, font='calibri 13')
         self.label_2.place(relx=0, rely=0)
+
+        self.label_eq_2 = tk.Label(self.marco_2_2, text=eq_2, font='courier 18 italic')
+        self.label_eq_2.place(relx=0.1, rely=0.5)
+
+        self.label_eq_3 = tk.Label(self.marco_2_2, text=eq_3, font='courier 18 italic')
+        self.label_eq_3.place(relx=0.45, rely=0.5)
 
         self.marco_2_2.place(relx=0.055, rely=0.341, relheight=0.315, relwidth=0.9)
 
