@@ -2,6 +2,7 @@
 import tkinter as tk
 import turtle as tr
 import math
+import tkinter.messagebox as tkm
 
 # ====================================================================================================== bugs
 '''
@@ -76,15 +77,89 @@ class Tortuga():
 
         self.t.screen.mainloop()
 
+def error_window():
+    global alfa, beta, force_f, rect_alfa, rect_beta, rect_f
+    s_rect = '0123456789.-'
+    count = 0
+
+    mensage = '''
+параметры неправильные, должно 
+быть исправлено следующее:
+'''
+
+    if rect_alfa == '':
+        mensage += f'>  α° является пустым.\n'
+    else:
+        if '-' in rect_alfa:
+             if rect_alfa.count('-') > 1 or rect_alfa[0] != '-':
+                mensage += f'>  в α° неправильно использован знак минус(-)\n'
+        if '.' in rect_alfa:
+             if rect_alfa.count('.') > 1:
+                mensage += f'>  в α° использовано больше одной точки(.)\n'
+        for i in rect_alfa:
+            if i not in s_rect:
+                mensage += f'>  в α° использован недопустимый символ({i})\n'
+                count += 1
+                break
+        
+    if rect_beta == '':
+        mensage += f'>  β° является пустым.\n'
+    else:
+        if '-' in rect_beta:
+            if rect_beta.count('-') > 1 or rect_beta[0] != '-':
+                mensage += f'>  в β° неправильно использован знак минус(-)\n'
+        if '.' in rect_beta:
+            if rect_beta.count('.') > 1:
+                mensage += f'>  в β° использовано больше одной точки(.)\n'
+        for i in rect_beta:
+            if i not in s_rect:
+                mensage += f'>  в β° использован недопустимый символ({i})\n'
+                count += 1
+                break
+        
+    if rect_f == '':
+        mensage += f'>  F является пустым.\n'
+    else:
+        if '-' in rect_f:
+           if rect_f.count('-') > 1 or rect_f[0] != '-':
+                mensage += f'>  в F неправильно использован знак минус(-)\n'
+        if '.' in rect_f:
+            if rect_f.count('.') > 1:
+                mensage += f'>  в F использовано больше одной точки(.)\n'
+        for i in rect_f:
+            if i not in s_rect:
+                mensage += f'>  в F использован недопустимый символ({i})\n'
+                count += 1
+                break
+
+    if rectify(rect_alfa) and rectify(rect_beta):
+        if not 0 < alfa < 180:
+            mensage += f'>   0 < α° < 180°.\n'
+
+        if alfa == 90:
+            if not 0 < beta < 90:
+                mensage += f'>  0 < β° < 90°.\n'
+        else:
+            if not 0 < beta < alfa:
+                mensage += f'>  0 < β° < α°\n'
+
+    if rectify(rect_f):
+        if force_f < 0:
+            mensage += f'>  0 < F\n'
+    
+    if count > 0:
+        mensage += f'>  solo los simbolos {s_rect} estan permitidos\n'
+            
+    mensage += 'пожалуйста, введите параметры снова.'
+
+    tkm.showwarning(message=mensage,title='предупреждение')
+
 class Functions(Tortuga):
     def __init__(self):
         pass
 
     def draw(self):
         Tortuga()
-
-    def funcion_n(self):
-        print(caution)
 
     def close_all(self):
         self.destroy()
@@ -118,10 +193,6 @@ class Functions(Tortuga):
         self.destroy()
         root_v = firsh_window()
         root_v.mainloop()
-
-    def error(self):
-        error = caution()
-        error.mainloop()
 
     def zoom_screen(self):
         self.state("zoomed")
@@ -188,7 +259,6 @@ class Functions(Tortuga):
             valuar = False
 
         if valuar:
-            print(f'alfa = {alfa}, valuar = {valuar}')
             if (count_1 + count_2) == 5:
                 forcer, t_ta, _, _ = solve_problem(alfa, beta, force_f)
                 condition_1 = (round(forcer, ndigits=1) == round(force_r, ndigits=1))
@@ -202,16 +272,14 @@ class Functions(Tortuga):
                     expl1 = expl_1()
                     expl1.mainloop()
             elif count_1 == 3:
-                force_r, teta = solve_problem(alfa, beta, force_f)
+                force_r, teta, _, _ = solve_problem(alfa, beta, force_f)
                 self.destroy()
                 expl1 = expl_1()
                 expl1.mainloop()
             else:
-               error = caution()
-               error.mainloop()
+                error_window()
         else:
-            error = caution()
-            error.mainloop()
+            error_window()   
 # ========================================================================================= window definition
 
 # ======================================================================== primary window
@@ -222,7 +290,7 @@ class firsh_window(tk.Tk, Functions):
 
         self.w_h_screen()
 
-        self.title('главное окно')
+        self.title('главное меню')
 
         self.marco_1 = tk.Frame(self)
 
@@ -236,7 +304,7 @@ class firsh_window(tk.Tk, Functions):
         self.label = tk.Label(self.marco_1, text=text_problem, font='calibri 17')
         self.label.place(relx=0.016, rely=0.1)
 
-        self.button = tk.Button(self.marco_1, text='начинать', command=self.go_menu, font='calibri 20')
+        self.button = tk.Button(self.marco_1, text='начать', command=self.go_menu, font='calibri 20')
         self.button.place(relx=0.388, rely=0.5)
 
         self.marco_1.place(relx=0, rely=0, relheight=1, relwidth=0.555)
@@ -309,10 +377,10 @@ class menu(tk.Tk, Functions):
         self.button_p = tk.Button(self, text='prueva boton', command=self.step_1)
         self.button_p.pack()
 
-        self.button_f = tk.Button(self, text='felcitar', command=self.funcion_n)
+        self.button_f = tk.Button(self, text='felcitar', command=self.congratulate)
         #self.button_f.pack()
 
-        self.button_ca = tk.Button(self.marco_a_2, text='вычислять', command=self.calculate, font='calibri 18')
+        self.button_ca = tk.Button(self.marco_a_2, text='вычислить', command=self.calculate, font='calibri 18')
         self.button_ca.place(rely=0, relx=0.8, relheight=1)
 
         self.button_ce = tk.Button(self.marco_a_2, text='закрыть', command=self.close_all, font='calibri 18')
@@ -348,7 +416,7 @@ class expl_1(tk.Tk, Functions):
 
         self.marco_1 = tk.Frame(self)
 
-        self.titulo = tk.Label(self.marco_1, text='1. вычислять силы', font='calibri 23')
+        self.titulo = tk.Label(self.marco_1, text='1. вычислить силы', font='calibri 23')
         self.titulo.place(relx=0.05, rely=0.333)
 
         self.marco_1.place(relx=0,rely=0, relwidth=1, relheight=0.111)
@@ -356,6 +424,11 @@ class expl_1(tk.Tk, Functions):
         self.marco_2 = tk.Frame(self)
 
         self.marco_2_1 = tk.Frame(self.marco_2, bg='white')
+
+        self.label_prueva = tk.Label(self.marco_2_1, text=f'X: Rₓ = F·cos({chr(966)}{chr(8306)}) = 0', font='courier 18 italic')
+        self.label_prueva.pack()
+
+        print(f'X: Rₓ = F cos({chr(981)}) = 0')
 
         self.marco_2_1.place(relx=0.044, rely=0, relwidth=0.322, relheight=1)
 
@@ -423,7 +496,7 @@ class expl_2(tk.Tk, Functions):
 
         self.marco_1 = tk.Frame(self)
 
-        self.titulo = tk.Label(self.marco_1, text='2. вычислять момент', font='calibri 23')
+        self.titulo = tk.Label(self.marco_1, text='2. вычислить момент', font='calibri 23')
         self.titulo.place(relx=0.05, rely=0.333)
 
         self.marco_1.place(relx=0,rely=0, relwidth=1, relheight=0.111)
@@ -563,100 +636,7 @@ class congra(tk.Tk, Functions):
         self.button_ce.place(rely=0.333, relx=0.088, relheight=0.333)
         
         self.marco_2.place(relx=0,rely=0.823, relwidth=1, relheight=0.177)
-
-# ======================================================================== warning window
-
-class caution(tk.Tk):
-    def __init__(self):
-        global alfa, beta, force_f, rect_alfa, rect_beta, rect_f
-
-        super().__init__()
-
-        width_screen = self.winfo_screenwidth()
-        height_screen = self.winfo_screenheight()
-
-        required_width = self.winfo_reqwidth() + 120
-        required_height = self.winfo_reqheight()
-
-        x = (width_screen - required_width) // 2
-        y = (height_screen - required_height) // 2
-
-        self.geometry(f'{required_width}x{required_height}+{x}+{y}')
-        self.title('предупреждение')
-
-        s_rect = '0123456789.-'
-
-        mensaje = '''
-параметры неправильные, следующие 
-настройки должны быть выполнены:
-'''
-
-        if rect_alfa == '':
-            mensaje += f'   пробел α° является пустым.\n'
-        else:
-            if '-' in rect_alfa:
-                if rect_alfa.count('-') > 1 or rect_alfa[0] != '-':
-                    mensaje += f'   el simbolo - no esta bien en α°\n'
-            if '.' in rect_alfa:
-                if rect_alfa.count('.') > 1:
-                    mensaje += f'   el simbolo . no esta bien en α°\n'
-            for i in rect_alfa:
-                if i not in s_rect:
-                    mensaje += f'    hay simbolos extra;os en alfa\n'
-                    break
-        
-        if rect_beta == '':
-            mensaje += f'   пробел β° является пустым.\n'
-        else:
-            if '-' in rect_beta:
-                if rect_beta.count('-') > 1 or rect_beta[0] != '-':
-                    mensaje += f'   el simbolo - no esta bien en β°\n'
-            if '.' in rect_beta:
-                if rect_beta.count('.') > 1:
-                    mensaje += f'   el simbolo . no esta bien en β°\n'
-            for i in rect_beta:
-                if i not in s_rect:
-                    mensaje += f'    hay simbolos extra;os en beta\n'
-                    break
-        
-        if rect_f == '':
-            mensaje += f'   пробел F является пустым.\n'
-        else:
-            if '-' in rect_f:
-                if rect_f.count('-') > 1 or rect_f[0] != '-':
-                    mensaje += f'   el simbolo - no esta bien en F\n'
-            if '.' in rect_f:
-                if rect_f.count('.') > 1:
-                    mensaje += f'   el simbolo . no esta bien en F\n'
-            for i in rect_f:
-                if i not in s_rect:
-                    mensaje += f'    hay simbolos extra;os en F\n'
-                    break
-
-        if rectify(rect_alfa) and rectify(rect_beta):
-            if not 0 < alfa < 180:
-                mensaje += f'    0 < α° < 90°.\n'
-
-            if alfa == 90:
-                if not 0 < beta < 90:
-                    mensaje += f'   0 < β° < 90°.\n'
-            else:
-                if not 0 < beta < alfa:
-                    mensaje += f'   0 < β° < α°\n'
-
-        if rectify(rect_f):
-            if force_f < 0:
-                mensaje += f'   F > 0\n'
-            
-        mensaje += 'пожалуйста, вновь ввести параметры.'
-
-        self.label = tk.Label(self, text=mensaje, font='calibri 13')
-        self.label.pack()
-
-        self.button = tk.Button(self, text='закрыть', command=self.destroy, font='calibri 13')
-        self.button.pack()
-
-# ============================================================================================ warning window
+# ===========================================================================================================
 
 if __name__ == '__main__':
     root = firsh_window()
