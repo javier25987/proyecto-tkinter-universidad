@@ -6,7 +6,7 @@ import tkinter.messagebox as tkm
 
 # ====================================================================================================== bugs
 '''
-se necesita redimencionar imagenes
+apriori no es un bug pero las formulas se ven raritas 
 '''
 # ==================================================================================== definition of elements
 
