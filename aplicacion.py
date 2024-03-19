@@ -6,7 +6,7 @@ import tkinter.messagebox as tkm
 
 # ====================================================================================================== bugs
 '''
-apriori no es un bug pero las formulas se ven raritas 
+turtle no se abre varias veces
 '''
 # ==================================================================================== definition of elements
 
@@ -51,6 +51,7 @@ def solve_problem(alfa, beta, f):
 
     return r, teta, r_x, r_y
 
+'''
 def rectify(s):
     rec = '0123456789.-'
     s = s.strip()
@@ -69,7 +70,14 @@ def rectify(s):
     if '.' in s:
         if s.count('.') > 1:
             return False
-    return True
+    return True'''
+
+def rectify(s):
+    try:
+        float(s)
+        return True
+    except ValueError:
+        return False
         
 def error_window():
     global alfa, beta, force_f, rect_alfa, rect_beta, rect_f
@@ -86,13 +94,13 @@ def error_window():
     else:
         if '-' in rect_alfa:
              if rect_alfa.count('-') > 1 or rect_alfa[0] != '-':
-                mensage += f'>  в α° неправильно использован знак минус(-)\n'
+                mensage += f'>  в α° неправильно использован знак минус (-)\n'
         if '.' in rect_alfa:
              if rect_alfa.count('.') > 1:
-                mensage += f'>  в α° использовано больше одной точки(.)\n'
+                mensage += f'>  в α° использовано больше одной точки (.)\n'
         for i in rect_alfa:
             if i not in s_rect:
-                mensage += f'>  в α° использован недопустимый символ({i})\n'
+                mensage += f'>  в α° использован недопустимый символ ({i})\n'
                 count += 1
                 break
         
@@ -101,13 +109,13 @@ def error_window():
     else:
         if '-' in rect_beta:
             if rect_beta.count('-') > 1 or rect_beta[0] != '-':
-                mensage += f'>  в β° неправильно использован знак минус(-)\n'
+                mensage += f'>  в β° неправильно использован знак минус (-)\n'
         if '.' in rect_beta:
             if rect_beta.count('.') > 1:
-                mensage += f'>  в β° использовано больше одной точки(.)\n'
+                mensage += f'>  в β° использовано больше одной точки (.)\n'
         for i in rect_beta:
             if i not in s_rect:
-                mensage += f'>  в β° использован недопустимый символ({i})\n'
+                mensage += f'>  в β° использован недопустимый символ ({i})\n'
                 count += 1
                 break
         
@@ -116,13 +124,13 @@ def error_window():
     else:
         if '-' in rect_f:
            if rect_f.count('-') > 1 or rect_f[0] != '-':
-                mensage += f'>  в F неправильно использован знак минус(-)\n'
+                mensage += f'>  в F неправильно использован знак минус (-)\n'
         if '.' in rect_f:
             if rect_f.count('.') > 1:
-                mensage += f'>  в F использовано больше одной точки(.)\n'
+                mensage += f'>  в F использовано больше одной точки (.)\n'
         for i in rect_f:
             if i not in s_rect:
-                mensage += f'>  в F использован недопустимый символ({i})\n'
+                mensage += f'>  в F использован недопустимый символ ({i})\n'
                 count += 1
                 break
 
@@ -142,7 +150,7 @@ def error_window():
             mensage += f'>  0 < F\n'
     
     if count > 0:
-        mensage += f'>  в использовании допустимы только эти символы {s_rect}\n'
+        mensage += f'>  в использовании допустимы только эти символы\n {s_rect}\n'
             
     mensage += 'пожалуйста, введите параметры снова.'
 
@@ -258,6 +266,8 @@ class Functions(Tortuga):
         if not 0 < alfa < 180:
             valuar = False
 
+        print(alfa, valuar)
+
         if valuar:
             if (count_1 + count_2) == 5:
                 forcer, t_ta, _, _ = solve_problem(alfa, beta, force_f)
@@ -304,7 +314,7 @@ class firsh_window(tk.Tk, Functions):
         self.label = tk.Label(self.marco_1, text=text_problem, font='calibri 17')
         self.label.place(relx=0.016, rely=0.1)
 
-        self.button = tk.Button(self.marco_1, text='начать', command=self.go_menu, font='calibri 20')
+        self.button = tk.Button(self.marco_1, text='начать', command=self.go_menu, font='calibri 25')
         self.button.place(relx=0.388, rely=0.5)
 
         self.marco_1.place(relx=0, rely=0, relheight=1, relwidth=0.555)
@@ -423,7 +433,17 @@ class expl_1(tk.Tk, Functions):
 
         self.marco_2 = tk.Frame(self)
 
-        self.marco_2_1 = tk.Frame(self.marco_2, bg='white')
+        self.marco_2_1 = tk.Frame(self.marco_2)
+
+        if alfa == 90:
+            self.img_forces = tk.PhotoImage(file='forces_1.png')
+        elif alfa < 90:
+            self.img_forces = tk.PhotoImage(file='forces_2.png')
+        elif alfa > 90:
+            self.img_forces = tk.PhotoImage(file='forces_3.png')
+
+        self.label_img_forces = tk.Label(self.marco_2_1, image=self.img_forces)
+        self.label_img_forces.pack()
 
         self.marco_2_1.place(relx=0.044, rely=0, relwidth=0.322, relheight=1)
 
@@ -443,7 +463,7 @@ P и ȹ, поэтому мы приступаем к их поиску, ȹ мо�
         self.label_1 = tk.Label(self.marco_2_2, text=text_1, font='calibri 13')
         self.label_1.pack()
 
-        eq_1 = f'X: Rₓ + P·cos({chr(966)}) = 0 \nY: Rᵧ - F + P·sin({chr(966)}) = 0'
+        eq_1 = f'X: Rₓ + P·cos({chr(966)}) = 0 \nY: Rᵧ - F + P·sin({chr(966)})=0'
 
         self.label_eq_1 = tk.Label(self.marco_2_2, text=eq_1, font='courier 18 italic')
         self.label_eq_1.pack()
@@ -502,9 +522,19 @@ class expl_2(tk.Tk, Functions):
 
         self.marco_2 = tk.Frame(self)
 
-        self.marco_2_1 = tk.Frame(self.marco_2, bg='white')
+        self.marco_2_1 = tk.Frame(self.marco_2)
 
-        self.marco_2_1.place(relx=0.05, rely=0, relheight=1, relwidth=0.5)
+        if alfa == 90:
+            self.img_moment = tk.PhotoImage(file='moment_1.png')
+        elif alfa < 90:
+            self.img_moment = tk.PhotoImage(file='moment_2.png')
+        elif alfa > 90:
+            self.img_moment = tk.PhotoImage(file='moment_3.png')
+
+        self.label_img_moment = tk.Label(self.marco_2_1, image=self.img_moment)
+        self.label_img_moment.place(relx=0)
+
+        self.marco_2_1.place(relx=0.05, rely=0, relheight=1, relwidth=0.7)
 
         self.marco_2_2 = tk.Frame(self.marco_2)
 
@@ -524,10 +554,10 @@ class expl_2(tk.Tk, Functions):
             eq_1 = f'Mₐ: 0.5·l·F+l·P·cos(-(90+β)) = 0'
             eq_2 = f'0.5·F + P·cos(90+β) = 0 \nP·cos(90+β) = -0.5·F \nP = -F/(2·cos(90+β))'
         elif alfa < 90:
-            eq_1 = f'Mₐ: 0.5·l·F·cos(-δ₆)+l·P·cos(-(90+β)) = 0'
+            eq_1 = f'Mₐ: 0.5·l·F·cos(-δ₆)+l·P·cos(-(90+β))=0'
             eq_2 = f'0.5·F·cos(δ₆)+P·cos(90+β) = 0 \nP·cos(90+β) = -0.5·F·cos(δ₆) \nP = (-F·cos(δ₆))/(2·cos(90+β)) \nδ₆ = 90 - α'
         elif alfa > 90:
-            eq_1 = f'Mₐ: 0.5·l·F·cos(δ₅)+l·P·cos(-(90+β)) = 0'
+            eq_1 = f'Mₐ: 0.5·l·F·cos(δ₅)+l·P·cos(-(90+β))=0'
             eq_2 = f'0.5·F·cos(δ₅) + P·cos(90+β) = 0 \nP·cos(90+β) = -0.5·F·cos(δ₅) \nP = (-F·cos(δ₅))/(2·cos(90+β)) \nδ₅ = α - 90'
 
         self.label_eq_1 = tk.Label(self.marco_2_2, text=eq_1, font='courier 15 italic')
