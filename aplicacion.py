@@ -51,27 +51,6 @@ def solve_problem(alfa, beta, f):
 
     return r, teta, r_x, r_y
 
-'''
-def rectify(s):
-    rec = '0123456789.-'
-    s = s.strip()
-    if s == '':
-        return False
-    while s[0] == '0':
-        s = s[1:]
-    for i in s:
-        if i not in rec:
-            return False
-    if '-' in s:
-        if s.count('-') > 1:
-            return False
-        if s[0] != '-':
-            return False
-    if '.' in s:
-        if s.count('.') > 1:
-            return False
-    return True'''
-
 def rectify(s):
     try:
         float(s)
@@ -266,13 +245,11 @@ class Functions(Tortuga):
         if not 0 < alfa < 180:
             valuar = False
 
-        print(alfa, valuar)
-
         if valuar:
             if (count_1 + count_2) == 5:
                 forcer, t_ta, _, _ = solve_problem(alfa, beta, force_f)
-                condition_1 = (round(forcer, ndigits=2) == round(force_r, ndigits=2))
-                condition_2 = (round(t_ta, ndigits=2) == round(teta, ndigits=2))
+                condition_1 = round(forcer, ndigits=2) == round(force_r, ndigits=2)
+                condition_2 = round(t_ta, ndigits=2) == round(teta, ndigits=2)
                 if  condition_1 and condition_2:
                     self.destroy()
                     congra_v = congra()
@@ -301,6 +278,7 @@ class firsh_window(tk.Tk, Functions):
         self.w_h_screen()
 
         self.title('главное меню')
+        self.iconphoto(False, tk.PhotoImage(file='icono.ico'))
 
         self.marco_1 = tk.Frame(self)
 
@@ -338,6 +316,7 @@ class menu(tk.Tk, Functions):
         self.w_h_screen()
 
         self.title('меню')
+        self.iconphoto(False, tk.PhotoImage(file='icono.ico'))
 
         self.marco_1 = tk.Frame(self)
 
@@ -423,6 +402,7 @@ class expl_1(tk.Tk, Functions):
         self.w_h_screen()
 
         self.title('шаг_1')
+        self.iconphoto(False, tk.PhotoImage(file='icono.ico'))
 
         self.marco_1 = tk.Frame(self)
 
@@ -512,6 +492,7 @@ class expl_2(tk.Tk, Functions):
         self.w_h_screen()
 
         self.title('шаг_2')
+        self.iconphoto(False, tk.PhotoImage(file='icono.ico'))
 
         self.marco_1 = tk.Frame(self)
 
@@ -597,6 +578,7 @@ class expl_3(tk.Tk, Functions):
         self.w_h_screen()
 
         self.title('шаг_3')
+        self.iconphoto(False, tk.PhotoImage(file='icono.ico'))
 
         r, t_ta, r_x, r_y = solve_problem(alfa, beta, force_f)
 
@@ -671,6 +653,7 @@ class congra(tk.Tk, Functions):
         self.w_h_screen()
 
         self.title('поздравления')
+        self.iconphoto(False, tk.PhotoImage(file='icono.ico'))
 
         self.marco_1 = tk.Frame(self)
 
