@@ -293,6 +293,7 @@ class firsh_window(tk.Tk, Functions):
         self.label.place(relx=0.016, rely=0.1)
 
         self.button = tk.Button(self.marco_1, text='начать', command=self.go_menu, font='calibri 25')
+        self.button.config(cursor='hand2')
         self.button.place(relx=0.388, rely=0.5)
 
         self.marco_1.place(relx=0, rely=0, relheight=1, relwidth=0.555)
@@ -367,12 +368,15 @@ class menu(tk.Tk, Functions):
         self.marco_a_2 = tk.Frame(self.marco_2)
 
         self.button_ro = tk.Button(self.marco_a_2, text='условие', command=self.root, font='calibri 18')
+        self.button_ro.config(cursor='hand2')
         self.button_ro.place(rely=0, relx=0.473, relheight=1)
 
         self.button_ca = tk.Button(self.marco_a_2, text='вычислить', command=self.calculate, font='calibri 18')
+        self.button_ca.config(cursor='hand2')
         self.button_ca.place(rely=0, relx=0.8, relheight=1)
 
         self.button_ce = tk.Button(self.marco_a_2, text='закрыть', command=self.close_all, font='calibri 18')
+        self.button_ce.config(cursor='hand2')
         self.button_ce.place(rely=0, relx=0.1, relheight=1)
 
         self.marco_2.place(rely=0.25, relx=0, relheight=0.2, relwidth=1)
@@ -474,9 +478,11 @@ P и ȹ, поэтому мы приступаем к их поиску, ȹ мо�
         self.marco_3 = tk.Frame(self)
 
         self.button = tk.Button(self.marco_3, text='следующий шаг', command=self.step_2, font='calibri 18')
+        self.button.config(cursor='hand2')
         self.button.place(rely=0.333, relx=0.733, relheight=0.333)
 
         self.button_m = tk.Button(self.marco_3, text='меню', command=self.go_menu, font='calibri 18')
+        self.button_m.config(cursor='hand2')
         self.button_m.place(rely=0.333, relx=0.088, relheight=0.333)
 
         self.marco_3.place(relx=0,rely=0.823, relwidth=1, relheight=0.177)
@@ -559,11 +565,13 @@ class expl_2(tk.Tk, Functions):
 
         self.marco_3 = tk.Frame(self)
 
-        self.button = tk.Button(self.marco_3, text='следующий шаг', command=self.step_3, font='calibri 18')
-        self.button.place(rely=0.333, relx=0.733, relheight=0.333)
+        self.button_c = tk.Button(self.marco_3, text='следующий шаг', command=self.step_3, font='calibri 18')
+        self.button_c.config(cursor='hand2')
+        self.button_c.place(rely=0.333, relx=0.733, relheight=0.333)
 
-        self.button = tk.Button(self.marco_3, text='предыдущий шаг', command=self.step_1, font='calibri 18')
-        self.button.place(rely=0.333, relx=0.088, relheight=0.333)
+        self.button_p = tk.Button(self.marco_3, text='предыдущий шаг', command=self.step_1, font='calibri 18')
+        self.button_p.config(cursor='hand2')
+        self.button_p.place(rely=0.333, relx=0.088, relheight=0.333)
 
         self.marco_3.place(relx=0,rely=0.823, relwidth=1, relheight=0.177)
 
@@ -625,8 +633,9 @@ class expl_3(tk.Tk, Functions):
 
         self.marco_2_3 = tk.Frame(self.marco_2)
 
-        self.button_m = tk.Button(self.marco_2_3, text='посмотреть рисунок', command=self.draw, font='calibri 18')
-        self.button_m.place(relx=0.375, rely=0.3)
+        self.button_r = tk.Button(self.marco_2_3, text='посмотреть рисунок', command=self.draw, font='calibri 18')
+        self.button_r.config(cursor='hand2')
+        self.button_r.place(relx=0.375, rely=0.3)
 
         self.marco_2_3.place(relx=0.055, rely=0.682, relheight=0.315, relwidth=0.888)
 
@@ -634,11 +643,13 @@ class expl_3(tk.Tk, Functions):
 
         self.marco_3 = tk.Frame(self)
 
-        self.button = tk.Button(self.marco_3, text='меню', command=self.go_menu, font='calibri 18')
-        self.button.place(rely=0.333, relx=0.831, relheight=0.333) 
+        self.button_m = tk.Button(self.marco_3, text='меню', command=self.go_menu, font='calibri 18')
+        self.button_m.config(cursor='hand2')
+        self.button_m.place(rely=0.333, relx=0.831, relheight=0.333) 
 
-        self.button = tk.Button(self.marco_3, text='предыдущий шаг', command=self.step_2, font='calibri 18')
-        self.button.place(rely=0.333, relx=0.088, relheight=0.333)
+        self.button_p = tk.Button(self.marco_3, text='предыдущий шаг', command=self.step_2, font='calibri 18')
+        self.button_p.config(cursor='hand2')
+        self.button_p.place(rely=0.333, relx=0.088, relheight=0.333)
         
         self.marco_3.place(relx=0,rely=0.823, relwidth=1, relheight=0.177)
 
@@ -660,17 +671,20 @@ class congra(tk.Tk, Functions):
         self.label = tk.Label(self, text='Поздравляем. Все параметры верны.', font='calibri 40')
         self.label.place(relx=0.08, rely=0.2)
 
-        self.button_m = tk.Button(self, text='посмотреть рисунок', command=self.draw, font='calibri 18')
-        self.button_m.place(rely=0.55, relx=0.388, relheight=0.063)
+        self.button_r = tk.Button(self, text='посмотреть рисунок', command=self.draw, font='calibri 18')
+        self.button_r.config(cursor='hand2')
+        self.button_r.place(rely=0.55, relx=0.388, relheight=0.063)
 
         self.marco_1.place(relx=0, rely=0, relwidth=1, relheight=0.823)
 
         self.marco_2 = tk.Frame(self)
 
         self.button_m = tk.Button(self.marco_2, text='меню', command=self.go_menu, font='calibri 18')
+        self.button_m.config(cursor='hand2')
         self.button_m.place(rely=0.333, relx=0.831, relheight=0.333) 
 
         self.button_ce = tk.Button(self.marco_2, text='закрыть', command=self.close_all, font='calibri 18')
+        self.button_ce.config(cursor='hand2')
         self.button_ce.place(rely=0.333, relx=0.088, relheight=0.333)
         
         self.marco_2.place(relx=0,rely=0.823, relwidth=1, relheight=0.177)
