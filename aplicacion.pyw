@@ -3,10 +3,9 @@ import tkinter as tk
 import turtle as tr
 import math
 import tkinter.messagebox as tkm
-
 # ====================================================================================================== bugs
 '''
-turtle no se abre varias veces
+> turtle no se abre varias veces
 '''
 # ==================================================================================== definition of elements
 
@@ -23,6 +22,7 @@ rect_alfa = ''
 rect_beta = ''
 rect_f = ''
 
+draw_times = 0
 # =================================================================== definition of functions within the code
 
 def solve_problem(alfa, beta, f):
@@ -117,12 +117,8 @@ def error_window():
         if not 0 < alfa < 180:
             mensage += f'>   0 < α° < 180°.\n'
 
-        if alfa == 90:
-            if not 0 < beta < 90:
-                mensage += f'>  0 < β° < 90°.\n'
-        else:
-            if not 0 < beta < alfa:
-                mensage += f'>  0 < β° < α°\n'
+        if not 0 < beta < alfa:
+            mensage += f'>  0 < β° < α°\n'
 
     if rectify(rect_f):
         if force_f < 0:
@@ -135,21 +131,154 @@ def error_window():
 
     tkm.showwarning(message=mensage,title='предупреждение')
 
-class Tortuga():
-    def __init__(self):
-        self.t = tr.Turtle()
+def draw_turtle():
+    global alfa, beta, teta, force_f, force_r
+    force_f *= 3
+    force_r *= 3
 
-        self.t.screen.mainloop()
+    final_2 = False
 
-class Functions(Tortuga):
+    alfa_r = math.radians(alfa)
+    beta_r = math.radians(beta)
+
+    if alfa == 90:
+        l_1 = math.tan(beta_r)
+        l_2 = 1/math.cos(beta_r)
+    else:
+        alfa_beta = math.sin(alfa_r-beta_r)
+        l_1 = math.sin(beta_r)/alfa_beta
+        l_2 = math.sin(math.pi-alfa_r)/alfa_beta
+
+    value = math.cos(math.pi-alfa_r)
+    center = math.sin(alfa_r)
+
+    if value > l_1:
+        k = 590/(1+value)
+        final_2 = True
+    else:
+        k = 590/(1+l_1)
+
+    way = 1*k
+    l_1 *= k
+    l_2 *= k
+    center = center*k + 34.6
+
+    t = tr.Turtle()
+
+    def linea_punteada(x):
+        x = int(x)
+        t.width(5)
+        for _ in range(x//20):
+            t.forward(10)
+            t.penup()
+            t.forward(10)
+            t.pendown()
+        t.forward(x%20)
+
+    t.width(5)
+    t.right(90)
+
+    if final_2:
+        linea_punteada(300)
+    else:
+        t.penup()
+        t.forward(300)
+        t.pendown()
+    
+    t.penup()
+    t.backward(way)
+    t.pendown()
+    t.left(alfa)
+
+    t.width(4)
+    t.forward(way/2)
+    t.right(alfa)
+    t.pencolor('red')
+    t.forward(force_f)
+
+    t.right(120)
+    t.forward(10)
+    t.backward(10)
+    t.right(120)
+    t.forward(10)
+    t.backward(10)
+    t.left(240)
+
+    t.backward(force_f)
+    t.pencolor('black')
+    t.left(alfa)
+    t.forward(way/2)
+    t.left(180-beta)
+
+    t.width(2)
+    t.forward(l_2)
+    t.left(180-alfa+beta)
+
+    t.width(5)
+    t.right(60)
+    t.forward(40)
+    t.right(120)
+    t.forward(40)
+    t.right(120)
+    t.forward(40)
+    t.right(60)
+
+    if final_2:
+        t.penup()
+        t.forward(l_1)
+        t.pendown()
+    else:
+        linea_punteada(l_1)
+
+    t.right(60)
+    t.forward(40)
+    t.right(120)
+    t.forward(40)
+    t.right(120)
+    t.forward(40)
+    t.right(60)
+
+    t.left(180-teta)
+    t.pencolor('red')
+    t.width(4)
+    t.forward(force_r)
+    t.right(120)
+    t.forward(10)
+    t.backward(10)
+    t.right(120)
+    t.forward(10)
+    t.backward(10)
+    t.left(240)
+    t.backward(force_r)
+    t.pencolor('black')
+    
+    if final_2:
+        t.width(5)
+        t.left(teta)
+        linea_punteada(value*k)
+        t.penup()
+        t.forward(50)
+    else:
+        t.right(180-teta)
+        linea_punteada(way)
+        t.penup()
+        t.forward(50)
+
+    t.screen.mainloop()
+
+class Functions():
     def __init__(self):
         pass
 
     def draw(self):
-        Tortuga()
-
-    def close_all(self):
-        self.destroy()
+        global draw_times
+        
+        if draw_times == 0:
+            draw_times += 1
+            draw_turtle()
+        else:
+            text = 'к сожалению, программа может\nпоказать рисунок только один раз'
+            tkm.showwarning(message=text, title='извините') 
 
     def go_menu(self):
         self.destroy()
@@ -180,9 +309,6 @@ class Functions(Tortuga):
         self.destroy()
         root_v = firsh_window()
         root_v.mainloop()
-
-    def zoom_screen(self):
-        self.state("zoomed")
 
     def w_h_screen(self):
         global width_window, height_window
@@ -375,7 +501,7 @@ class menu(tk.Tk, Functions):
         self.button_ca.config(cursor='hand2')
         self.button_ca.place(rely=0, relx=0.8, relheight=1)
 
-        self.button_ce = tk.Button(self.marco_a_2, text='закрыть', command=self.close_all, font='calibri 18')
+        self.button_ce = tk.Button(self.marco_a_2, text='закрыть', command=self.destroy, font='calibri 18')
         self.button_ce.config(cursor='hand2')
         self.button_ce.place(rely=0, relx=0.1, relheight=1)
 
@@ -683,7 +809,7 @@ class congra(tk.Tk, Functions):
         self.button_m.config(cursor='hand2')
         self.button_m.place(rely=0.333, relx=0.831, relheight=0.333) 
 
-        self.button_ce = tk.Button(self.marco_2, text='закрыть', command=self.close_all, font='calibri 18')
+        self.button_ce = tk.Button(self.marco_2, text='закрыть', command=self.destroy, font='calibri 18')
         self.button_ce.config(cursor='hand2')
         self.button_ce.place(rely=0.333, relx=0.088, relheight=0.333)
         
