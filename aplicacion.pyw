@@ -5,12 +5,16 @@ import math
 import tkinter.messagebox as tkm
 # ====================================================================================================== bugs
 '''
-> turtle no se abre varias veces
+> turtle doesn't work twice
+
+> the formulas have a linear format
 '''
 # ==================================================================================== definition of elements
-
 width_window = 1000
 height_window = 600
+
+width_screen = 0
+height_screen = 0
 
 alfa = 0
 beta = 0
@@ -24,7 +28,6 @@ rect_f = ''
 
 draw_times = 0
 # =================================================================== definition of functions within the code
-
 def solve_problem(alfa, beta, f):
     alfa = math.radians(alfa)
     beta = math.radians(beta)
@@ -150,7 +153,6 @@ def draw_turtle():
         l_2 = math.sin(math.pi-alfa_r)/alfa_beta
 
     value = math.cos(math.pi-alfa_r)
-    center = math.sin(alfa_r)
 
     if value > l_1:
         k = 590/(1+value)
@@ -158,14 +160,12 @@ def draw_turtle():
     else:
         k = 590/(1+l_1)
 
-    way = 1*k
     l_1 *= k
     l_2 *= k
-    center = center*k + 34.6
 
     t = tr.Turtle()
 
-    def linea_punteada(x):
+    def dots_line(x):
         x = int(x)
         t.width(5)
         for _ in range(x//20):
@@ -179,19 +179,19 @@ def draw_turtle():
     t.right(90)
 
     if final_2:
-        linea_punteada(300)
+        dots_line(300)
     else:
         t.penup()
         t.forward(300)
         t.pendown()
     
     t.penup()
-    t.backward(way)
+    t.backward(k)
     t.pendown()
     t.left(alfa)
 
     t.width(4)
-    t.forward(way/2)
+    t.forward(k/2)
     t.right(alfa)
     t.pencolor('red')
     t.forward(force_f)
@@ -207,7 +207,7 @@ def draw_turtle():
     t.backward(force_f)
     t.pencolor('black')
     t.left(alfa)
-    t.forward(way/2)
+    t.forward(k/2)
     t.left(180-beta)
 
     t.width(2)
@@ -228,7 +228,7 @@ def draw_turtle():
         t.forward(l_1)
         t.pendown()
     else:
-        linea_punteada(l_1)
+        dots_line(l_1)
 
     t.right(60)
     t.forward(40)
@@ -255,12 +255,12 @@ def draw_turtle():
     if final_2:
         t.width(5)
         t.left(teta)
-        linea_punteada(value*k)
+        dots_line(value*k)
         t.penup()
         t.forward(50)
     else:
         t.right(180-teta)
-        linea_punteada(way)
+        dots_line(k)
         t.penup()
         t.forward(50)
 
@@ -309,9 +309,9 @@ class Functions():
         self.destroy()
         root_v = firsh_window()
         root_v.mainloop()
-
-    def w_h_screen(self):
-        global width_window, height_window
+        
+    def w_h_screen_firsh(self):
+        global width_window, height_window, width_screen, height_screen
 
         width_screen = self.winfo_screenwidth()
         height_screen = self.winfo_screenheight()
@@ -319,7 +319,15 @@ class Functions():
         x = (width_screen - width_window) // 2
         y = (height_screen - height_window) // 2
 
-        self.geometry(f'{width_window}x{height_window}+{x}+{y}')
+        self.geometry(f'{width_window}x{height_window}+{x}+{y-40}')
+
+    def w_h_screen(self):
+        global width_window, height_window, width_screen, height_screen
+
+        x = (width_screen - width_window) // 2
+        y = (height_screen - height_window) // 2
+
+        self.geometry(f'{width_window}x{height_window}+{x}+{y-40}')
     
     def calculate(self):
         global alfa, beta, teta, force_f, force_r, rect_alfa, rect_beta, rect_f
@@ -372,23 +380,17 @@ class Functions():
             valuar = False
 
         if valuar:
-            if (count_1 + count_2) == 5:
-                forcer, t_ta, _, _ = solve_problem(alfa, beta, force_f)
-                condition_1 = round(forcer, ndigits=2) == round(force_r, ndigits=2)
-                condition_2 = round(t_ta, ndigits=2) == round(teta, ndigits=2)
+            if count_1 + count_2 == 5:
+                force_r_p, teta_p, _, _ = solve_problem(alfa, beta, force_f)
+                condition_1 = round(force_r_p, ndigits=2) == round(force_r, ndigits=2)
+                condition_2 = round(teta_p, ndigits=2) == round(teta, ndigits=2)
                 if  condition_1 and condition_2:
-                    self.destroy()
-                    congra_v = congra()
-                    congra_v.mainloop()
+                    self.congratulate()
                 else:
-                    self.destroy()
-                    expl1 = expl_1()
-                    expl1.mainloop()
+                    self.step_1()
             elif count_1 == 3:
                 force_r, teta, _, _ = solve_problem(alfa, beta, force_f)
-                self.destroy()
-                expl1 = expl_1()
-                expl1.mainloop()
+                self.step_1()
             else:
                 error_window()
         else:
@@ -401,7 +403,7 @@ class firsh_window(tk.Tk, Functions):
     def __init__(self):
         super().__init__()
 
-        self.w_h_screen()
+        self.w_h_screen_firsh()
 
         self.title('главное меню')
         self.iconphoto(False, tk.PhotoImage(file='icono.ico'))
