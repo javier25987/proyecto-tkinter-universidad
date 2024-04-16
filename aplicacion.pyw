@@ -134,8 +134,42 @@ def error_window():
 
     tkm.showwarning(message=mensage,title='предупреждение')
 
+def dots_line(t, x):
+    x = int(x)
+    t.width(5)
+    for _ in range(x//20):
+        t.forward(10)
+        t.penup()
+        t.forward(10)
+        t.pendown()
+    t.forward(x%20)
+    
+def triangle_draw(t):
+    t.width(5)
+    t.right(60)
+    t.forward(40)
+    t.right(120)
+    t.forward(40)
+    t.right(120)
+    t.forward(40)
+    t.right(60)
+
+def force_draw(t, f):
+    t.width(4)
+    t.pencolor('red')
+    t.forward(f)
+    t.right(120)
+    t.forward(10)
+    t.backward(10)
+    t.right(120)
+    t.forward(10)
+    t.backward(10)
+    t.left(240)
+    t.backward(f)
+    t.pencolor('black')
+
 def draw_turtle():
-    global alfa, beta, teta, force_f, force_r
+    global alfa, beta, teta, force_f, force_r, draw_times
     force_f *= 3
     force_r *= 3
 
@@ -158,28 +192,19 @@ def draw_turtle():
         k = 590/(1+value)
         final_2 = True
     else:
-        k = 590/(1+l_1)
+        k = 590/(1+l_1) 
 
     l_1 *= k
     l_2 *= k
 
     t = tr.Turtle()
-
-    def dots_line(x):
-        x = int(x)
-        t.width(5)
-        for _ in range(x//20):
-            t.forward(10)
-            t.penup()
-            t.forward(10)
-            t.pendown()
-        t.forward(x%20)
+    t.speed(0.2)
 
     t.width(5)
     t.right(90)
 
     if final_2:
-        dots_line(300)
+        dots_line(t, 300)
     else:
         t.penup()
         t.forward(300)
@@ -193,19 +218,9 @@ def draw_turtle():
     t.width(4)
     t.forward(k/2)
     t.right(alfa)
-    t.pencolor('red')
-    t.forward(force_f)
+    
+    force_draw(t, force_f)
 
-    t.right(120)
-    t.forward(10)
-    t.backward(10)
-    t.right(120)
-    t.forward(10)
-    t.backward(10)
-    t.left(240)
-
-    t.backward(force_f)
-    t.pencolor('black')
     t.left(alfa)
     t.forward(k/2)
     t.left(180-beta)
@@ -214,53 +229,30 @@ def draw_turtle():
     t.forward(l_2)
     t.left(180-alfa+beta)
 
-    t.width(5)
-    t.right(60)
-    t.forward(40)
-    t.right(120)
-    t.forward(40)
-    t.right(120)
-    t.forward(40)
-    t.right(60)
+    triangle_draw(t)
 
     if final_2:
         t.penup()
         t.forward(l_1)
         t.pendown()
     else:
-        dots_line(l_1)
-
-    t.right(60)
-    t.forward(40)
-    t.right(120)
-    t.forward(40)
-    t.right(120)
-    t.forward(40)
-    t.right(60)
+        dots_line(t, l_1)
+        
+    triangle_draw(t)
 
     t.left(180-teta)
-    t.pencolor('red')
-    t.width(4)
-    t.forward(force_r)
-    t.right(120)
-    t.forward(10)
-    t.backward(10)
-    t.right(120)
-    t.forward(10)
-    t.backward(10)
-    t.left(240)
-    t.backward(force_r)
-    t.pencolor('black')
+    
+    force_draw(t, force_r)
     
     if final_2:
         t.width(5)
         t.left(teta)
-        dots_line(value*k)
+        dots_line(t, value*k)
         t.penup()
         t.forward(50)
     else:
         t.right(180-teta)
-        dots_line(k)
+        dots_line(t, k)
         t.penup()
         t.forward(50)
 
