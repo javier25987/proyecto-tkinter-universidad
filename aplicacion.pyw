@@ -5,8 +5,6 @@ import math
 import tkinter.messagebox as tkm
 # ====================================================================================================== bugs
 '''
-> turtle doesn't work twice
-
 > the formulas have a linear format
 '''
 # ==================================================================================== definition of elements
@@ -748,6 +746,7 @@ class make_draw(tk.Tk, Functions):
             ym_0 = math.sin(beta_r)/math.sin(alfa_r-beta_r)
             xm_1 = math.cos(alfa_r - math.pi/2)
             ym_1 = 1 + math.sin(alfa_r - math.pi/2)
+            
             if alfa - beta < 90:
                 h = 1 + ym_0
             else:
@@ -767,16 +766,17 @@ class make_draw(tk.Tk, Functions):
         ym_1 = o_y - ym_1
         xm_0 = o_x
         ym_0 = o_y - (k + ym_0)
+        
         _, _, teta_x, teta_y = solve_problem(alfa, beta, force_f)
         teta_x = teta_x*5 + k_x
+        
         teta_y = k_y - teta_y*5
+        p_x_f = (k_x + xm_1)/2
+        p_y_f = (k_y + ym_1)/2
         
         self.canva.create_line(o_x, o_y, xm_0 , ym_0, width=7, fill='black')
         self.canva.create_line(k_x, k_y, xm_1 , ym_1, width=6, fill='black')
         self.canva.create_line(xm_0 , ym_0, xm_1 , ym_1,  width=2, fill='black')
-        
-        p_x_f = (k_x + xm_1)/2
-        p_y_f = (k_y + ym_1)/2
     
         self.canva.create_line(p_x_f, p_y_f, p_x_f, p_y_f + (force_f*5), width=7, fill='red', arrow='last')
         self.canva.create_line(k_x, k_y, teta_x, teta_y, width=7, fill='red', arrow='last')
@@ -796,25 +796,3 @@ class make_draw(tk.Tk, Functions):
 
 if __name__ == '__main__':
     firsh_window().mainloop()
-    
-'''
-def rectify(s):
-    rec = '0123456789.-'
-    s = s.strip()
-    if s == '':
-        return False
-    while s[0] == '0':
-        s = s[1:]
-    for i in s:
-        if i not in rec:
-            return False
-    if '-' in s:
-        if s.count('-') > 1:
-            return False
-        if s[0] != '-':
-            return False
-    if '.' in s:
-        if s.count('.') > 1:
-            return False
-    return True
-'''
