@@ -27,6 +27,7 @@ rect_beta = ''
 rect_f = ''
 
 draw_times = 0
+return_value = 0
 # =================================================================== definition of functions within the code
 def solve_problem(alfa, beta, f):
     alfa = math.radians(alfa)
@@ -134,173 +135,53 @@ def error_window():
 
     tkm.showwarning(message=mensage,title='предупреждение')
 
-def dots_line(t, x):
-    x = int(x)
-    t.width(5)
-    for _ in range(x//20):
-        t.forward(10)
-        t.penup()
-        t.forward(10)
-        t.pendown()
-    t.forward(x%20)
-    
-def triangle_draw(t):
-    t.width(5)
-    t.right(60)
-    t.forward(40)
-    t.right(120)
-    t.forward(40)
-    t.right(120)
-    t.forward(40)
-    t.right(60)
-
-def force_draw(t, f):
-    t.width(4)
-    t.pencolor('red')
-    t.forward(f)
-    t.right(120)
-    t.forward(10)
-    t.backward(10)
-    t.right(120)
-    t.forward(10)
-    t.backward(10)
-    t.left(240)
-    t.backward(f)
-    t.pencolor('black')
-
-def draw_turtle():
-    global alfa, beta, teta, force_f, force_r, draw_times
-    force_f *= 3
-    force_r *= 3
-
-    final_2 = False
-
-    alfa_r = math.radians(alfa)
-    beta_r = math.radians(beta)
-
-    if alfa == 90:
-        l_1 = math.tan(beta_r)
-        l_2 = 1/math.cos(beta_r)
-    else:
-        alfa_beta = math.sin(alfa_r-beta_r)
-        l_1 = math.sin(beta_r)/alfa_beta
-        l_2 = math.sin(math.pi-alfa_r)/alfa_beta
-
-    value = math.cos(math.pi-alfa_r)
-
-    if value > l_1:
-        k = 590/(1+value)
-        final_2 = True
-    else:
-        k = 590/(1+l_1) 
-
-    l_1 *= k
-    l_2 *= k
-
-    t = tr.Turtle()
-    t.speed(0.2)
-
-    t.width(5)
-    t.right(90)
-
-    if final_2:
-        dots_line(t, 300)
-    else:
-        t.penup()
-        t.forward(300)
-        t.pendown()
-    
-    t.penup()
-    t.backward(k)
-    t.pendown()
-    t.left(alfa)
-
-    t.width(4)
-    t.forward(k/2)
-    t.right(alfa)
-    
-    force_draw(t, force_f)
-
-    t.left(alfa)
-    t.forward(k/2)
-    t.left(180-beta)
-
-    t.width(2)
-    t.forward(l_2)
-    t.left(180-alfa+beta)
-
-    triangle_draw(t)
-
-    if final_2:
-        t.penup()
-        t.forward(l_1)
-        t.pendown()
-    else:
-        dots_line(t, l_1)
-        
-    triangle_draw(t)
-
-    t.left(180-teta)
-    
-    force_draw(t, force_r)
-    
-    if final_2:
-        t.width(5)
-        t.left(teta)
-        dots_line(t, value*k)
-        t.penup()
-        t.forward(50)
-    else:
-        t.right(180-teta)
-        dots_line(t, k)
-        t.penup()
-        t.forward(50)
-
-    t.screen.mainloop()
-
 class Functions():
     def __init__(self):
         pass
 
     def draw(self):
-        global draw_times
-        
-        if draw_times == 0:
-            draw_times += 1
-            draw_turtle()
-        else:
-            text = 'к сожалению, программа может\nпоказать рисунок только один раз'
-            tkm.showwarning(message=text, title='извините') 
+        self.destroy()
+        make_draw().mainloop()
 
     def go_menu(self):
         self.destroy()
-        menu_v = menu()
-        menu_v.mainloop()
+        menu().mainloop()
 
     def congratulate(self):
+        global return_value
+        return_value = 1
+        
         self.destroy()
-        congra_v = congra()
-        congra_v.mainloop()
+        congra().mainloop()
 
     def step_1(self):
         self.destroy()
-        expl1 = expl_1()
-        expl1.mainloop()
+        expl_1().mainloop()
 
     def step_2(self):
         self.destroy()
-        expl2 = expl_2()
-        expl2.mainloop()
+        expl_2().mainloop()
     
     def step_3(self):
+        global return_value
+        return_value = 0
+        
         self.destroy()
-        expl3 = expl_3()
-        expl3.mainloop()
+        expl_3().mainloop()
 
     def root(self):
         self.destroy()
-        root_v = firsh_window()
-        root_v.mainloop()
+        firsh_window().mainloop()
+        
+    def go_back_funcion(self):
+        global return_value
+        
+        if return_value == 0:
+            self.step_3()
+        else:
+            self.congratulate()
+            
+        self.destroy()
         
     def w_h_screen_firsh(self):
         global width_window, height_window, width_screen, height_screen
@@ -398,7 +279,6 @@ class firsh_window(tk.Tk, Functions):
         self.w_h_screen_firsh()
 
         self.title('главное меню')
-        self.iconphoto(False, tk.PhotoImage(file='icono.ico'))
 
         self.marco_1 = tk.Frame(self)
 
@@ -437,7 +317,6 @@ class menu(tk.Tk, Functions):
         self.w_h_screen()
 
         self.title('меню')
-        self.iconphoto(False, tk.PhotoImage(file='icono.ico'))
 
         self.marco_1 = tk.Frame(self)
 
@@ -448,35 +327,50 @@ class menu(tk.Tk, Functions):
 
         self.label_get = tk.Label(self, text='ваш ответ', font='calibri 20')
         self.label_get.place(relx=0.625, rely=0.04)
+        
+        self.circle_1 = tk.Label(self.marco_a_1, text='°', font='calibri 25')
+        self.circle_1.place(rely=0, relx=0.203, relheight=1, relwidth=0.044)
 
         self.input_alfa = tk.Entry(self.marco_a_1, font='calibri 20')
         self.input_alfa.place(rely=0, relx=0.133, relwidth=0.08, relheight=1)
 
-        self.l_alfa = tk.Label(self.marco_a_1, text=f'α°=', font='calibri 25')
+        self.l_alfa = tk.Label(self.marco_a_1, text=f'α=', font='calibri 25')
         self.l_alfa.place(rely=0, relx=0.088, relheight=1, relwidth=0.044)
+        
+        self.circle_2 = tk.Label(self.marco_a_1, text='°', font='calibri 25')
+        self.circle_2.place(rely=0, relx=0.372, relheight=1, relwidth=0.044)
 
         self.input_beta = tk.Entry(self.marco_a_1, font='calibri 20')
         self.input_beta.place(rely=0, relx=0.302, relwidth=0.08, relheight=1)
 
-        self.l_beta = tk.Label(self.marco_a_1, text=f'β°=', font='calibri 25')
+        self.l_beta = tk.Label(self.marco_a_1, text=f'β=', font='calibri 25')
         self.l_beta.place(rely=0, relx=0.257, relheight=1, relwidth=0.044)
+        
+        self.label_h_1 = tk.Label(self.marco_a_1, text='Н', font='calibri 25')
+        self.label_h_1.place(rely=0, relx=0.542, relheight=1, relwidth=0.044)
 
         self.input_force_f = tk.Entry(self.marco_a_1, font='calibri 20')
         self.input_force_f.place(rely=0, relx=0.471, relwidth=0.08, relheight=1)
 
         self.l_f_f = tk.Label(self.marco_a_1, text=f'F=', font='calibri 25')
         self.l_f_f.place(rely=0, relx=0.426, relheight=1, relwidth=0.044)
+        
+        self.label_h_2 = tk.Label(self.marco_a_1, text='Н', font='calibri 25')
+        self.label_h_2.place(rely=0, relx=0.738, relheight=1, relwidth=0.044)
 
         self.input_force_r = tk.Entry(self.marco_a_1, font='calibri 20')
         self.input_force_r.place(rely=0, relx=0.666, relwidth=0.08, relheight=1)
 
         self.l_f_r = tk.Label(self.marco_a_1, text=f'R=', font='calibri 25')
         self.l_f_r.place(rely=0, relx=0.622, relheight=1, relwidth=0.044)
+        
+        self.circle_3 = tk.Label(self.marco_a_1, text='°', font='calibri 25')
+        self.circle_3.place(rely=0, relx=0.905, relheight=1, relwidth=0.044)
 
         self.input_teta = tk.Entry(self.marco_a_1, font='calibri 20')
         self.input_teta.place(rely=0, relx=0.835, relwidth=0.08, relheight=1)
 
-        self.l_teta = tk.Label(self.marco_a_1, text=f'θ°=', font='calibri 25')
+        self.l_teta = tk.Label(self.marco_a_1, text=f'θ=', font='calibri 25')
         self.l_teta.place(rely=0, relx=0.791, relheight=1, relwidth=0.044)
 
         self.marco_1.place(relx=0, rely=0, relheight=0.2, relwidth=1)
@@ -526,7 +420,6 @@ class expl_1(tk.Tk, Functions):
         self.w_h_screen()
 
         self.title('шаг_1')
-        self.iconphoto(False, tk.PhotoImage(file='icono.ico'))
 
         self.marco_1 = tk.Frame(self)
 
@@ -618,7 +511,6 @@ class expl_2(tk.Tk, Functions):
         self.w_h_screen()
 
         self.title('шаг_2')
-        self.iconphoto(False, tk.PhotoImage(file='icono.ico'))
 
         self.marco_1 = tk.Frame(self)
 
@@ -706,7 +598,6 @@ class expl_3(tk.Tk, Functions):
         self.w_h_screen()
 
         self.title('шаг_3')
-        self.iconphoto(False, tk.PhotoImage(file='icono.ico'))
 
         r, t_ta, r_x, r_y = solve_problem(alfa, beta, force_f)
 
@@ -723,7 +614,7 @@ class expl_3(tk.Tk, Functions):
 
         text_1 = 'Взяв значения P и ȹ, вспомнив формулы Rx и Ry, заменим их и получим результирующую силу.'
 
-        eq_1 = f'Rₓ = -P·cos({chr(966)}) = {r_x:.2f}      Rᵧ = F - P·sin({chr(966)}) = {r_y:.2f}'
+        eq_1 = f'Rₓ = -P·cos({chr(966)}) = {r_x:.2f}°      Rᵧ = F - P·sin({chr(966)}) = {r_y:.2f}°'
 
         self.label_1 = tk.Label(self.marco_2_1, text=text_1, font='calibri 13')
         self.label_1.place(relx=0, rely=0)
@@ -737,8 +628,8 @@ class expl_3(tk.Tk, Functions):
 
         text_2 = 'С помощью теоремы Пифагора и решения θ получаем следующие формулы, в которые можно подставить значения R и θ.'
 
-        eq_2 = f'R² = Rₓ² + Rᵧ² \nR = {r:.2f}'
-        eq_3 = f'cos(θ) = Rₓ/R \nθ = arcos(Rₓ/R) = {t_ta:.2f}'
+        eq_2 = f'R² = Rₓ² + Rᵧ² \nR = {r:.2f}Н'
+        eq_3 = f'cos(θ) = Rₓ/R \nθ = arcos(Rₓ/R) = {t_ta:.2f}°'
 
         self.label_2 = tk.Label(self.marco_2_2, text=text_2, font='calibri 13')
         self.label_2.place(relx=0, rely=0)
@@ -784,7 +675,6 @@ class congra(tk.Tk, Functions):
         self.w_h_screen()
 
         self.title('поздравления')
-        self.iconphoto(False, tk.PhotoImage(file='icono.ico'))
 
         self.marco_1 = tk.Frame(self)
 
@@ -808,8 +698,123 @@ class congra(tk.Tk, Functions):
         self.button_ce.place(rely=0.333, relx=0.088, relheight=0.333)
         
         self.marco_2.place(relx=0,rely=0.823, relwidth=1, relheight=0.177)
+        
+# =========================================================================== draw window
+
+class make_draw(tk.Tk, Functions):
+    def __init__(self):
+        global alfa, beta, force_f, force_f, teta
+        
+        super().__init__()
+        
+        self.w_h_screen()
+        
+        self.label_alfa = tk.Label(self, text=f'α = {alfa:.2f}°', font='courier 18 italic')
+        self.label_alfa.place(relx=0.025, rely=0.05)
+        
+        self.label_beta = tk.Label(self, text=f'β = {beta:.2f}°', font='courier 18 italic')
+        self.label_beta.place(relx=0.025, rely=0.13)
+        
+        self.label_force_f = tk.Label(self, text=f'сила F = {force_f:.2f}Н', font='courier 18 italic')
+        self.label_force_f.place(relx=0.025, rely=0.21)
+
+        self.label_force_r = tk.Label(self, text=f'сила R = {force_r:.2f}Н', font='courier 18 italic')
+        self.label_force_r.place(relx=0.025, rely=0.29)
+        
+        self.label_teta = tk.Label(self, text=f'θ = {teta:.2f}°', font='courier 18 italic')
+        self.label_teta.place(relx=0.025, rely=0.37)
+        
+        self.canva = tk.Canvas(self, width=700, height=590)
+        
+        def create_tringle(x, y, k=7):
+            self.canva.create_line(x, y, x-40, y+20, width=k, fill='black')
+            self.canva.create_line(x-40, y+20, x-40, y-20, width=k, fill='black')
+            self.canva.create_line(x, y, x-40, y-20, width=k, fill='black')
+            
+        alfa_r = math.radians(alfa)
+        beta_r = math.radians(beta)
+        
+        if alfa == 90:
+            ym_0 = math.tan(beta_r)
+            xm_1 = 1
+            ym_1 = 1
+            h = 1 + ym_0
+        elif alfa < 90:
+            ym_0 = math.sin(beta_r)/math.sin(alfa_r-beta_r)
+            xm_1 = math.sin(alfa_r)
+            ym_1 = 1 - xm_1/math.tan(alfa_r)
+            h = 1 + ym_0
+        elif alfa > 90:
+            ym_0 = math.sin(beta_r)/math.sin(alfa_r-beta_r)
+            xm_1 = math.cos(alfa_r - math.pi/2)
+            ym_1 = 1 + math.sin(alfa_r - math.pi/2)
+            if alfa - beta < 90:
+                h = 1 + ym_0
+            else:
+                h = math.sin(alfa_r - math.pi/2) + 1
+                
+        k = 585 / h
+        
+        ym_0 *= k
+        xm_1 *= k
+        ym_1 *= k
+        
+        o_x = 230
+        o_y = 620
+        k_x = o_x
+        k_y = o_y - k
+        xm_1 = o_x + xm_1
+        ym_1 = o_y - ym_1
+        xm_0 = o_x
+        ym_0 = o_y - (k + ym_0)
+        _, _, teta_x, teta_y = solve_problem(alfa, beta, force_f)
+        teta_x = teta_x*5 + k_x
+        teta_y = k_y - teta_y*5
+        
+        self.canva.create_line(o_x, o_y, xm_0 , ym_0, width=7, fill='black')
+        self.canva.create_line(k_x, k_y, xm_1 , ym_1, width=6, fill='black')
+        self.canva.create_line(xm_0 , ym_0, xm_1 , ym_1,  width=2, fill='black')
+        
+        p_x_f = (k_x + xm_1)/2
+        p_y_f = (k_y + ym_1)/2
+    
+        self.canva.create_line(p_x_f, p_y_f, p_x_f, p_y_f + (force_f*5), width=7, fill='red', arrow='last')
+        self.canva.create_line(k_x, k_y, teta_x, teta_y, width=7, fill='red', arrow='last')
+        
+        create_tringle(k_x, k_y, 6)
+        create_tringle(xm_0, ym_0, 6)
+        
+        self.canva.place(x=290, y=5)
+        
+        self.buton = tk.Button(self, text='назад', command=self.go_back_funcion, font='calibri 18')
+        self.buton.place(relx=0.04, rely=0.85)
+        
+        self.buton_c = tk.Button(self, text='закрыть',command=self.destroy, font='calibri 18')
+        self.buton_c.place(relx=0.8, rely=0.85)
+        
 # ===========================================================================================================
 
 if __name__ == '__main__':
-    root = firsh_window()
-    root.mainloop()
+    firsh_window().mainloop()
+    
+'''
+def rectify(s):
+    rec = '0123456789.-'
+    s = s.strip()
+    if s == '':
+        return False
+    while s[0] == '0':
+        s = s[1:]
+    for i in s:
+        if i not in rec:
+            return False
+    if '-' in s:
+        if s.count('-') > 1:
+            return False
+        if s[0] != '-':
+            return False
+    if '.' in s:
+        if s.count('.') > 1:
+            return False
+    return True
+'''
