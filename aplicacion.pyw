@@ -14,11 +14,11 @@ height_window = 600
 width_screen = 0
 height_screen = 0
 
-alfa = 0
-beta = 0
-teta = 0
-force_f = 0
-force_r = 0
+alfa = 60
+beta = 30
+teta = 60
+force_f = 20
+force_r = 10
 
 rect_alfa = ''
 rect_beta = ''
@@ -71,63 +71,63 @@ def error_window():
 '''
 
     if rect_alfa == '':
-        mensage += f'>  α° является пустым.\n'
+        mensage += f'=>  α° является пустым.\n'
     else:
         if '-' in rect_alfa:
              if rect_alfa.count('-') > 1 or rect_alfa[0] != '-':
-                mensage += f'>  в α° неправильно использован знак минус (-)\n'
+                mensage += f'=>  в α° неправильно использован знак минус (-)\n'
         if '.' in rect_alfa:
              if rect_alfa.count('.') > 1:
-                mensage += f'>  в α° использовано больше одной точки (.)\n'
+                mensage += f'=>  в α° использовано больше одной точки (.)\n'
         for i in rect_alfa:
             if i not in s_rect:
-                mensage += f'>  в α° использован недопустимый символ ({i})\n'
+                mensage += f'=>  в α° использован недопустимый символ ({i})\n'
                 count += 1
                 break
         
     if rect_beta == '':
-        mensage += f'>  β° является пустым.\n'
+        mensage += f'=>  β° является пустым.\n'
     else:
         if '-' in rect_beta:
             if rect_beta.count('-') > 1 or rect_beta[0] != '-':
-                mensage += f'>  в β° неправильно использован знак минус (-)\n'
+                mensage += f'=>  в β° неправильно использован знак минус (-)\n'
         if '.' in rect_beta:
             if rect_beta.count('.') > 1:
-                mensage += f'>  в β° использовано больше одной точки (.)\n'
+                mensage += f'=>  в β° использовано больше одной точки (.)\n'
         for i in rect_beta:
             if i not in s_rect:
-                mensage += f'>  в β° использован недопустимый символ ({i})\n'
+                mensage += f'=>  в β° использован недопустимый символ ({i})\n'
                 count += 1
                 break
         
     if rect_f == '':
-        mensage += f'>  F является пустым.\n'
+        mensage += f'=>  F является пустым.\n'
     else:
         if '-' in rect_f:
            if rect_f.count('-') > 1 or rect_f[0] != '-':
-                mensage += f'>  в F неправильно использован знак минус (-)\n'
+                mensage += f'=>  в F неправильно использован знак минус (-)\n'
         if '.' in rect_f:
             if rect_f.count('.') > 1:
-                mensage += f'>  в F использовано больше одной точки (.)\n'
+                mensage += f'=>  в F использовано больше одной точки (.)\n'
         for i in rect_f:
             if i not in s_rect:
-                mensage += f'>  в F использован недопустимый символ ({i})\n'
+                mensage += f'=>  в F использован недопустимый символ ({i})\n'
                 count += 1
                 break
 
     if rectify(rect_alfa) and rectify(rect_beta):
         if not 0 < alfa < 180:
-            mensage += f'>   0 < α° < 180°.\n'
+            mensage += f'=>   0 < α° < 180°.\n'
 
         if not 0 < beta < alfa:
-            mensage += f'>  0 < β° < α°\n'
+            mensage += f'=>  0 < β° < α°\n'
 
     if rectify(rect_f):
         if force_f < 0:
-            mensage += f'>  0 < F\n'
+            mensage += f'=>  0 < F\n'
     
     if count > 0:
-        mensage += f'>  в использовании допустимы только эти символы\n {s_rect}\n'
+        mensage += f'=>  в использовании допустимы только эти символы\n {s_rect}\n'
             
     mensage += 'пожалуйста, введите параметры снова.'
 
@@ -142,6 +142,9 @@ class Functions():
         make_draw().mainloop()
 
     def go_menu(self):
+        global return_value
+        return_value = 2
+        
         self.destroy()
         menu().mainloop()
 
@@ -174,13 +177,57 @@ class Functions():
     def go_back_funcion(self):
         global return_value
         
-        if return_value == 0:
-            self.step_3()
-        else:
-            self.congratulate()
+        match return_value:
+            case 0:
+                self.step_3()
+            case 1:
+                self.congratulate()
+            case 2:
+                self.go_menu()
             
         self.destroy()
+    
+    def open_draw(self):
+        global alfa, beta, force_f, rect_alfa, rect_beta, rect_f
+
+        count = 0
+        valuar = False
+
+        rect_alfa = str(self.input_alfa.get())
         
+        if rectify(rect_alfa):
+            alfa = float(self.input_alfa.get())
+            count += 1
+
+        rect_beta = str(self.input_beta.get())
+
+        if rectify(rect_beta):
+            beta = float(self.input_beta.get())
+            count += 1
+
+        rect_f = str(self.input_force_f.get())
+
+        if rectify(rect_f):
+            force_f = float(self.input_force_f.get())
+            count += 1
+            
+        if beta < alfa:
+            valuar = True
+
+        if force_f < 0:
+            valuar = False
+
+        if not 0 < alfa < 180:
+            valuar = False
+        
+        if valuar:
+            if count == 3:
+                self.draw()
+            else:
+                error_window()
+        else:
+            error_window()
+                
     def w_h_screen_firsh(self):
         global width_window, height_window, width_screen, height_screen
 
@@ -237,12 +284,8 @@ class Functions():
         else:
             force_r = 0
 
-        if alfa == 90:
-            if 0 < beta < 90:
-                valuar = True
-        else:
-            if 0 < beta < alfa:
-                valuar = True
+        if beta < alfa:
+            valuar = True
 
         if force_f < 0:
             valuar = False
@@ -287,8 +330,11 @@ class firsh_window(tk.Tk, Functions):
 и направление реакции R шарнира, если известно, 
 что вес стержня равен 20 Н.'''
 
+        self.label_p = tk.Label(self.marco_1, text='условия задачи:', font='calibri 20')
+        self.label_p.place(relx=0.016, rely=0.08)
+        
         self.label = tk.Label(self.marco_1, text=text_problem, font='calibri 17')
-        self.label.place(relx=0.016, rely=0.1)
+        self.label.place(relx=0.016, rely=0.16)
 
         self.button = tk.Button(self.marco_1, text='начать', command=self.go_menu, font='calibri 25')
         self.button.config(cursor='hand2')
@@ -330,6 +376,7 @@ class menu(tk.Tk, Functions):
         self.circle_1.place(rely=0, relx=0.203, relheight=1, relwidth=0.044)
 
         self.input_alfa = tk.Entry(self.marco_a_1, font='calibri 20')
+        self.input_alfa.insert(0, f'{alfa}')
         self.input_alfa.place(rely=0, relx=0.133, relwidth=0.08, relheight=1)
 
         self.l_alfa = tk.Label(self.marco_a_1, text=f'α=', font='calibri 25')
@@ -339,6 +386,7 @@ class menu(tk.Tk, Functions):
         self.circle_2.place(rely=0, relx=0.372, relheight=1, relwidth=0.044)
 
         self.input_beta = tk.Entry(self.marco_a_1, font='calibri 20')
+        self.input_beta.insert(0, f'{beta}')
         self.input_beta.place(rely=0, relx=0.302, relwidth=0.08, relheight=1)
 
         self.l_beta = tk.Label(self.marco_a_1, text=f'β=', font='calibri 25')
@@ -348,6 +396,7 @@ class menu(tk.Tk, Functions):
         self.label_h_1.place(rely=0, relx=0.542, relheight=1, relwidth=0.044)
 
         self.input_force_f = tk.Entry(self.marco_a_1, font='calibri 20')
+        self.input_force_f.insert(0, f'{force_f}')
         self.input_force_f.place(rely=0, relx=0.471, relwidth=0.08, relheight=1)
 
         self.l_f_f = tk.Label(self.marco_a_1, text=f'F=', font='calibri 25')
@@ -381,11 +430,15 @@ class menu(tk.Tk, Functions):
 
         self.button_ro = tk.Button(self.marco_a_2, text='условие', command=self.root, font='calibri 18')
         self.button_ro.config(cursor='hand2')
-        self.button_ro.place(rely=0, relx=0.473, relheight=1)
+        self.button_ro.place(rely=0, relx=0.5, relheight=1)
 
-        self.button_ca = tk.Button(self.marco_a_2, text='вычислить', command=self.calculate, font='calibri 18')
+        self.button_ca = tk.Button(self.marco_a_2, text='решение', command=self.calculate, font='calibri 18')
         self.button_ca.config(cursor='hand2')
         self.button_ca.place(rely=0, relx=0.8, relheight=1)
+        
+        self.button_dr = tk.Button(self.marco_a_2, text='рисунок', command=self.open_draw, font='calibri 18')
+        self.button_dr.config(cursor='hand2')
+        self.button_dr.place(rely=0, relx=0.648, relheight=1)
 
         self.button_ce = tk.Button(self.marco_a_2, text='закрыть', command=self.destroy, font='calibri 18')
         self.button_ce.config(cursor='hand2')
@@ -612,7 +665,7 @@ class expl_3(tk.Tk, Functions):
 
         text_1 = 'Взяв значения P и ȹ, вспомнив формулы Rx и Ry, заменим их и получим результирующую силу.'
 
-        eq_1 = f'Rₓ = -P·cos({chr(966)}) = {r_x:.2f}°      Rᵧ = F - P·sin({chr(966)}) = {r_y:.2f}°'
+        eq_1 = f'Rₓ = -P·cos({chr(966)}) = {r_x:.2f}       Rᵧ = F - P·sin({chr(966)}) = {r_y:.2f}'
 
         self.label_1 = tk.Label(self.marco_2_1, text=text_1, font='calibri 13')
         self.label_1.place(relx=0, rely=0)
@@ -627,16 +680,16 @@ class expl_3(tk.Tk, Functions):
         text_2 = 'С помощью теоремы Пифагора и решения θ получаем следующие формулы, в которые можно подставить значения R и θ.'
 
         eq_2 = f'R² = Rₓ² + Rᵧ² \nR = {r:.2f}Н'
-        eq_3 = f'cos(θ) = Rₓ/R \nθ = arcos(Rₓ/R) = {t_ta:.2f}°'
+        eq_3 = f'cos(θ) = Rₓ/R\nθ = arсcos(Rₓ/R)\nθ = {t_ta:.2f}°'
 
         self.label_2 = tk.Label(self.marco_2_2, text=text_2, font='calibri 13')
         self.label_2.place(relx=0, rely=0)
 
         self.label_eq_2 = tk.Label(self.marco_2_2, text=eq_2, font='courier 18 italic')
-        self.label_eq_2.place(relx=0.1, rely=0.5)
+        self.label_eq_2.place(relx=0.1, rely=0.4)
 
         self.label_eq_3 = tk.Label(self.marco_2_2, text=eq_3, font='courier 18 italic')
-        self.label_eq_3.place(relx=0.45, rely=0.5)
+        self.label_eq_3.place(relx=0.45, rely=0.4)
 
         self.marco_2_2.place(relx=0.055, rely=0.341, relheight=0.315, relwidth=0.9)
 
@@ -690,6 +743,10 @@ class congra(tk.Tk, Functions):
         self.button_m = tk.Button(self.marco_2, text='меню', command=self.go_menu, font='calibri 18')
         self.button_m.config(cursor='hand2')
         self.button_m.place(rely=0.333, relx=0.831, relheight=0.333) 
+        
+        self.button_m = tk.Button(self.marco_2, text='решение', command=self.step_1, font='calibri 18')
+        self.button_m.config(cursor='hand2')
+        self.button_m.place(rely=0.333, relx=0.47, relheight=0.333) 
 
         self.button_ce = tk.Button(self.marco_2, text='закрыть', command=self.destroy, font='calibri 18')
         self.button_ce.config(cursor='hand2')
@@ -701,11 +758,13 @@ class congra(tk.Tk, Functions):
 
 class make_draw(tk.Tk, Functions):
     def __init__(self):
-        global alfa, beta, force_f, force_f, teta
+        global alfa, beta, force_f, force_r, teta
         
         super().__init__()
         
         self.w_h_screen()
+        
+        force_r, teta, _, _ = solve_problem(alfa, beta, force_f)
         
         self.label_alfa = tk.Label(self, text=f'α = {alfa:.2f}°', font='courier 18 italic')
         self.label_alfa.place(relx=0.025, rely=0.05)
@@ -724,10 +783,34 @@ class make_draw(tk.Tk, Functions):
         
         self.canva = tk.Canvas(self, width=700, height=590)
         
-        def create_tringle(x, y, k=7):
-            self.canva.create_line(x, y, x-40, y+20, width=k, fill='black')
-            self.canva.create_line(x-40, y+20, x-40, y-20, width=k, fill='black')
-            self.canva.create_line(x, y, x-40, y-20, width=k, fill='black')
+        def create_tringle(x, y, k=4):
+            self.canva.create_line(x, y, x-40, y+20, width=k, fill='black', capstyle=tk.ROUND)
+            self.canva.create_line(x-40, y+20, x-40, y-20, width=k, fill='black', capstyle=tk.ROUND)
+            self.canva.create_line(x, y, x-40, y-20, width=k, fill='black', capstyle=tk.ROUND)
+            
+            self.canva.create_line(x-40, y-20, x-48, y-12, width=2, capstyle=tk.ROUND)
+            self.canva.create_line(x-40, y-12, x-48, y-4, width=2, capstyle=tk.ROUND)
+            self.canva.create_line(x-40, y-4, x-48, y+4, width=2, capstyle=tk.ROUND)
+            self.canva.create_line(x-40, y+4, x-48, y+12, width=2, capstyle=tk.ROUND)
+            self.canva.create_line(x-40, y+12, x-48, y+20, width=2, capstyle=tk.ROUND)
+            
+        def create_angle(x, y, a_1, a_2, name, radius=70):
+            x_0, y_0 = x - radius, y - radius
+            x_1, y_1 = x + radius, y + radius
+            i_angle = a_1 + a_2/2
+            radius += 15
+            i_angle = math.radians(i_angle)
+            x_n, y_n = x + radius*math.cos(i_angle), y - radius*math.sin(i_angle)
+            
+            self.canva.create_arc(x_0, y_0, x_1, y_1, start=a_1, extent=a_2, width=3)
+            self.canva.create_text(x_n, y_n, text=name, font='courier 18 italic')
+            
+        def create_force(x_0, y_0, x_1, y_1, name):
+            x = (x_0 + x_1)/2
+            y = (y_0 + y_1)/2
+            
+            self.canva.create_line(x_0, y_0, x_1, y_1, width=7, fill='red', arrow='last', capstyle=tk.ROUND)
+            self.canva.create_text(x + 20, y, text=name, font='courier 18 italic')
             
         alfa_r = math.radians(alfa)
         beta_r = math.radians(beta)
@@ -774,23 +857,37 @@ class make_draw(tk.Tk, Functions):
         p_x_f = (k_x + xm_1)/2
         p_y_f = (k_y + ym_1)/2
         
-        self.canva.create_line(o_x, o_y, xm_0 , ym_0, width=7, fill='black')
-        self.canva.create_line(k_x, k_y, xm_1 , ym_1, width=6, fill='black')
-        self.canva.create_line(xm_0 , ym_0, xm_1 , ym_1,  width=2, fill='black')
-    
-        self.canva.create_line(p_x_f, p_y_f, p_x_f, p_y_f + (force_f*5), width=7, fill='red', arrow='last')
-        self.canva.create_line(k_x, k_y, teta_x, teta_y, width=7, fill='red', arrow='last')
+        self.canva.create_line(o_x, o_y, k_x, k_y, width=4, fill='black', dash=(200, 8, 5, 200), capstyle=tk.ROUND)
+        self.canva.create_line(k_x, k_y, xm_1 , ym_1, width=4, fill='black', capstyle=tk.ROUND)
+        self.canva.create_line(xm_0 , ym_0, xm_1 , ym_1,  width=4, fill='black', capstyle=tk.ROUND)
+        self.canva.create_line(k_x, k_y, xm_0 , ym_0,  width=4, fill='black', dash=(200, 8, 5, 200), capstyle=tk.ROUND)
         
-        create_tringle(k_x, k_y, 6)
-        create_tringle(xm_0, ym_0, 6)
+        self.canva.create_text(k_x-10, k_y-20, text='A', font='calibri 19')
+        self.canva.create_text(xm_1+10 , ym_1, text='B', font='calibri 19')
+        self.canva.create_text(xm_0, ym_0-15, text='C', font='calibri 19')
         
+        create_tringle(k_x, k_y)
+        create_tringle(xm_0, ym_0)
+        
+        create_angle(k_x, k_y, -90, alfa, 'α')
+        
+        create_force(p_x_f, p_y_f, p_x_f, p_y_f + (force_f*5), 'F')
+        create_force(k_x, k_y, teta_x, teta_y, 'R')
+        
+        if alfa == 90:
+            create_angle(xm_1 , ym_1, 180, -beta, 'β')
+        elif alfa > 90:
+            create_angle(xm_1 , ym_1, alfa-270, -beta, 'β')
+        elif alfa < 90:
+            create_angle(xm_1 , ym_1, 90+alfa, -beta, 'β')
+            
         self.canva.place(x=290, y=5)
         
         self.buton = tk.Button(self, text='назад', command=self.go_back_funcion, font='calibri 18')
-        self.buton.place(relx=0.04, rely=0.85)
+        self.buton.place(relx=0.85, rely=0.85)
         
         self.buton_c = tk.Button(self, text='закрыть',command=self.destroy, font='calibri 18')
-        self.buton_c.place(relx=0.8, rely=0.85)
+        self.buton_c.place(relx=0.04, rely=0.85)
         
 # ===========================================================================================================
 
