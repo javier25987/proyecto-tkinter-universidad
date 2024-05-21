@@ -188,72 +188,15 @@ class Functions():
         
     def close_all(self):
         self.destroy()
-    
-    def open_draw(self):
-        global alpha, beta, force_f, rect_alpha, rect_beta, rect_f
-
-        count = 0
-        valuar = False
-
-        rect_alpha = str(self.input_alpha.get())
         
-        if rectify(rect_alpha):
-            alpha = float(self.input_alpha.get())
-            count += 1
-
-        rect_beta = str(self.input_beta.get())
-
-        if rectify(rect_beta):
-            beta = float(self.input_beta.get())
-            count += 1
-
-        rect_f = str(self.input_force_f.get())
-
-        if rectify(rect_f):
-            force_f = float(self.input_force_f.get())
-            count += 1
-            
-        if beta < alpha:
-            valuar = True
-
-        if force_f < 0:
-            valuar = False
-
-        if not 0 < alpha < 180:
-            valuar = False
-        
-        if valuar:
-            if count == 3:
-                self.draw()
-            else:
-                error_window()
-        else:
-            error_window()
-                
-    def w_h_screen_firsh(self):
-        global width_window, height_window, width_screen, height_screen
-
-        width_screen = self.winfo_screenwidth()
-        height_screen = self.winfo_screenheight()
-
-        x = (width_screen - width_window) // 2
-        y = (height_screen - height_window) // 2
-
-        self.geometry(f'{width_window}x{height_window}+{x}+{y-40}')
-
-    def w_h_screen(self):
-        global width_window, height_window, width_screen, height_screen
-
-        x = (width_screen - width_window) // 2
-        y = (height_screen - height_window) // 2
-
-        self.geometry(f'{width_window}x{height_window}+{x}+{y-40}')
-    
-    def calculate(self):
+    def rect_values_in_window(self):
         global alpha, beta, teta, force_f, force_r, rect_alpha, rect_beta, rect_f
 
         count_1 = 0
         count_2 = 0
+        v_1 = False
+        v_2 = False
+        v_3 = False
         valuar = False
 
         rect_alpha = str(self.input_alpha.get())
@@ -287,14 +230,54 @@ class Functions():
             force_r = 0
 
         if beta < alpha:
+            v_1 = True
+
+        if force_f > 0:
+            v_2 = True
+
+        if 0 < alpha < 180:
+            v_3 = True
+            
+        if (v_1 == True) and (v_2 == True) and (v_3 == True):
             valuar = True
+        
+        return valuar, count_1, count_2
+        
+    def open_draw(self):
+        valuar, count, _ = self.rect_values_in_window()
+        
+        if valuar:
+            if count == 3:
+                self.draw()
+            else:
+                error_window()
+        else:
+            error_window()
+                
+    def w_h_screen_firsh(self):
+        global width_window, height_window, width_screen, height_screen
 
-        if force_f < 0:
-            valuar = False
+        width_screen = self.winfo_screenwidth()
+        height_screen = self.winfo_screenheight()
 
-        if not 0 < alpha < 180:
-            valuar = False
+        x = (width_screen - width_window) // 2
+        y = (height_screen - height_window) // 2
 
+        self.geometry(f'{width_window}x{height_window}+{x}+{y-40}')
+
+    def w_h_screen(self):
+        global width_window, height_window, width_screen, height_screen
+
+        x = (width_screen - width_window) // 2
+        y = (height_screen - height_window) // 2
+
+        self.geometry(f'{width_window}x{height_window}+{x}+{y-40}')
+    
+    def calculate(self):
+        global alpha, beta, teta, force_f, force_r, rect_alpha, rect_beta, rect_f
+        
+        valuar, count_1, count_2 = self.rect_values_in_window()
+ 
         if valuar:
             if count_1 + count_2 == 5:
                 force_r_p, teta_p, _, _ = solve_problem(alpha, beta, force_f)
