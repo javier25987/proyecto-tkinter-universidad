@@ -65,24 +65,24 @@ def force_draw(t, f):
     t.pencolor('black')
 
 def draw_turtle():
-    global alfa, beta, teta, force_f, force_r, draw_times
+    global alpha, beta, teta, force_f, force_r, draw_times
     force_f *= 3
     force_r *= 3
 
     final_2 = False
 
-    alfa_r = math.radians(alfa)
+    alpha_r = math.radians(alpha)
     beta_r = math.radians(beta)
 
-    if alfa == 90:
+    if alpha == 90:
         l_1 = math.tan(beta_r)
         l_2 = 1/math.cos(beta_r)
     else:
-        alfa_beta = math.sin(alfa_r-beta_r)
-        l_1 = math.sin(beta_r)/alfa_beta
-        l_2 = math.sin(math.pi-alfa_r)/alfa_beta
+        alpha_beta = math.sin(alpha_r-beta_r)
+        l_1 = math.sin(beta_r)/alpha_beta
+        l_2 = math.sin(math.pi-alpha_r)/alpha_beta
 
-    value = math.cos(math.pi-alfa_r)
+    value = math.cos(math.pi-alpha_r)
 
     if value > l_1:
         k = 590/(1+value)
@@ -109,21 +109,21 @@ def draw_turtle():
     t.penup()
     t.backward(k)
     t.pendown()
-    t.left(alfa)
+    t.left(alpha)
 
     t.width(4)
     t.forward(k/2)
-    t.right(alfa)
+    t.right(alpha)
     
     force_draw(t, force_f)
 
-    t.left(alfa)
+    t.left(alpha)
     t.forward(k/2)
     t.left(180-beta)
 
     t.width(2)
     t.forward(l_2)
-    t.left(180-alfa+beta)
+    t.left(180-alpha+beta)
 
     triangle_draw(t)
 

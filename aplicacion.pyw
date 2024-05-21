@@ -14,36 +14,35 @@ height_window = 600
 width_screen = 0
 height_screen = 0
 
-alfa = 60
+alpha = 60
 beta = 30
 teta = 60
 force_f = 20
 force_r = 10
 
-rect_alfa = ''
+rect_alpha = ''
 rect_beta = ''
 rect_f = ''
 
-draw_times = 0
 return_value = 0
 # =================================================================== definition of functions within the code
-def solve_problem(alfa, beta, f):
-    alfa = math.radians(alfa)
+def solve_problem(alpha, beta, f):
+    alpha = math.radians(alpha)
     beta = math.radians(beta)
     fact = math.pi/2
     b_ta = fact + beta
 
-    if alfa == fact:
+    if alpha == fact:
         phi = math.pi - beta
     else:
-        phi = fact + alfa - beta
+        phi = fact + alpha - beta
 
-    if alfa == fact:
+    if alpha == fact:
         p = (-f)/(2*math.cos(b_ta))
-    elif alfa < fact:
-        p = (-f*math.cos(fact-alfa))/(2*math.cos(b_ta))
+    elif alpha < fact:
+        p = (-f*math.cos(fact-alpha))/(2*math.cos(b_ta))
     else:
-        p = (-f*math.cos(alfa-fact))/(2*math.cos(b_ta))
+        p = (-f*math.cos(alpha-fact))/(2*math.cos(b_ta))
 
     r_x = -p*math.cos(phi)
     r_y = f-(p*math.sin(phi))
@@ -61,7 +60,7 @@ def rectify(s):
         return False
         
 def error_window():
-    global alfa, beta, force_f, rect_alfa, rect_beta, rect_f
+    global alpha, beta, force_f, rect_alpha, rect_beta, rect_f
     s_rect = '0123456789.-'
     count = 0
 
@@ -70,16 +69,16 @@ def error_window():
 быть исправлено следующее:
 '''
 
-    if rect_alfa == '':
+    if rect_alpha == '':
         mensage += f'=>  α° является пустым.\n'
     else:
-        if '-' in rect_alfa:
-             if rect_alfa.count('-') > 1 or rect_alfa[0] != '-':
+        if '-' in rect_alpha:
+             if rect_alpha.count('-') > 1 or rect_alpha[0] != '-':
                 mensage += f'=>  в α° неправильно использован знак минус (-)\n'
-        if '.' in rect_alfa:
-             if rect_alfa.count('.') > 1:
+        if '.' in rect_alpha:
+             if rect_alpha.count('.') > 1:
                 mensage += f'=>  в α° использовано больше одной точки (.)\n'
-        for i in rect_alfa:
+        for i in rect_alpha:
             if i not in s_rect:
                 mensage += f'=>  в α° использован недопустимый символ ({i})\n'
                 count += 1
@@ -115,11 +114,11 @@ def error_window():
                 count += 1
                 break
 
-    if rectify(rect_alfa) and rectify(rect_beta):
-        if not 0 < alfa < 180:
+    if rectify(rect_alpha) and rectify(rect_beta):
+        if not 0 < alpha < 180:
             mensage += f'=>   0 < α° < 180°.\n'
 
-        if not 0 < beta < alfa:
+        if not 0 < beta < alpha:
             mensage += f'=>  0 < β° < α°\n'
 
     if rectify(rect_f):
@@ -131,7 +130,7 @@ def error_window():
             
     mensage += 'пожалуйста, введите параметры снова.'
 
-    tkm.showwarning(message=mensage,title='предупреждение')
+    tkm.showwarning(message=mensage, title='предупреждение')
 
 class Functions():
     def __init__(self):
@@ -186,17 +185,20 @@ class Functions():
                 self.go_menu()
             
         self.destroy()
+        
+    def close_all(self):
+        self.destroy()
     
     def open_draw(self):
-        global alfa, beta, force_f, rect_alfa, rect_beta, rect_f
+        global alpha, beta, force_f, rect_alpha, rect_beta, rect_f
 
         count = 0
         valuar = False
 
-        rect_alfa = str(self.input_alfa.get())
+        rect_alpha = str(self.input_alpha.get())
         
-        if rectify(rect_alfa):
-            alfa = float(self.input_alfa.get())
+        if rectify(rect_alpha):
+            alpha = float(self.input_alpha.get())
             count += 1
 
         rect_beta = str(self.input_beta.get())
@@ -211,13 +213,13 @@ class Functions():
             force_f = float(self.input_force_f.get())
             count += 1
             
-        if beta < alfa:
+        if beta < alpha:
             valuar = True
 
         if force_f < 0:
             valuar = False
 
-        if not 0 < alfa < 180:
+        if not 0 < alpha < 180:
             valuar = False
         
         if valuar:
@@ -248,16 +250,16 @@ class Functions():
         self.geometry(f'{width_window}x{height_window}+{x}+{y-40}')
     
     def calculate(self):
-        global alfa, beta, teta, force_f, force_r, rect_alfa, rect_beta, rect_f
+        global alpha, beta, teta, force_f, force_r, rect_alpha, rect_beta, rect_f
 
         count_1 = 0
         count_2 = 0
         valuar = False
 
-        rect_alfa = str(self.input_alfa.get())
+        rect_alpha = str(self.input_alpha.get())
         
-        if rectify(rect_alfa):
-            alfa = float(self.input_alfa.get())
+        if rectify(rect_alpha):
+            alpha = float(self.input_alpha.get())
             count_1 += 1
 
         rect_beta = str(self.input_beta.get())
@@ -284,18 +286,18 @@ class Functions():
         else:
             force_r = 0
 
-        if beta < alfa:
+        if beta < alpha:
             valuar = True
 
         if force_f < 0:
             valuar = False
 
-        if not 0 < alfa < 180:
+        if not 0 < alpha < 180:
             valuar = False
 
         if valuar:
             if count_1 + count_2 == 5:
-                force_r_p, teta_p, _, _ = solve_problem(alfa, beta, force_f)
+                force_r_p, teta_p, _, _ = solve_problem(alpha, beta, force_f)
                 condition_1 = round(force_r_p, ndigits=2) == round(force_r, ndigits=2)
                 condition_2 = round(teta_p, ndigits=2) == round(teta, ndigits=2)
                 if  condition_1 and condition_2:
@@ -303,7 +305,7 @@ class Functions():
                 else:
                     self.step_1()
             elif count_1 == 3:
-                force_r, teta, _, _ = solve_problem(alfa, beta, force_f)
+                force_r, teta, _, _ = solve_problem(alpha, beta, force_f)
                 self.step_1()
             else:
                 error_window()
@@ -354,7 +356,7 @@ class firsh_window(tk.Tk, Functions):
 
 class menu(tk.Tk, Functions):
     def __init__(self):
-        global alfa, beta, teta, force_f, force_r
+        global alpha, beta, teta, force_f, force_r
         
         super().__init__()
 
@@ -375,12 +377,12 @@ class menu(tk.Tk, Functions):
         self.circle_1 = tk.Label(self.marco_a_1, text='°', font='calibri 25')
         self.circle_1.place(rely=0, relx=0.203, relheight=1, relwidth=0.044)
 
-        self.input_alfa = tk.Entry(self.marco_a_1, font='calibri 20')
-        self.input_alfa.insert(0, f'{alfa}')
-        self.input_alfa.place(rely=0, relx=0.133, relwidth=0.08, relheight=1)
+        self.input_alpha = tk.Entry(self.marco_a_1, font='calibri 20')
+        self.input_alpha.insert(0, f'{alpha}')
+        self.input_alpha.place(rely=0, relx=0.133, relwidth=0.08, relheight=1)
 
-        self.l_alfa = tk.Label(self.marco_a_1, text=f'α=', font='calibri 25')
-        self.l_alfa.place(rely=0, relx=0.088, relheight=1, relwidth=0.044)
+        self.l_alpha = tk.Label(self.marco_a_1, text=f'α=', font='calibri 25')
+        self.l_alpha.place(rely=0, relx=0.088, relheight=1, relwidth=0.044)
         
         self.circle_2 = tk.Label(self.marco_a_1, text='°', font='calibri 25')
         self.circle_2.place(rely=0, relx=0.372, relheight=1, relwidth=0.044)
@@ -432,7 +434,7 @@ class menu(tk.Tk, Functions):
         self.button_ro.config(cursor='hand2')
         self.button_ro.place(rely=0, relx=0.5, relheight=1)
 
-        self.button_ca = tk.Button(self.marco_a_2, text='решение', command=self.calculate, font='calibri 18')
+        self.button_ca = tk.Button(self.marco_a_2, text='вычислить', command=self.calculate, font='calibri 18')
         self.button_ca.config(cursor='hand2')
         self.button_ca.place(rely=0, relx=0.8, relheight=1)
         
@@ -440,7 +442,7 @@ class menu(tk.Tk, Functions):
         self.button_dr.config(cursor='hand2')
         self.button_dr.place(rely=0, relx=0.648, relheight=1)
 
-        self.button_ce = tk.Button(self.marco_a_2, text='закрыть', command=self.destroy, font='calibri 18')
+        self.button_ce = tk.Button(self.marco_a_2, text='закрыть', command=self.close_all, font='calibri 18')
         self.button_ce.config(cursor='hand2')
         self.button_ce.place(rely=0, relx=0.1, relheight=1)
 
@@ -464,7 +466,7 @@ class menu(tk.Tk, Functions):
 
 class expl_1(tk.Tk, Functions):
     def __init__(self):
-        global alfa, beta, teta, force_f, force_r
+        global alpha, beta, teta, force_f, force_r
 
         super().__init__()
 
@@ -483,11 +485,11 @@ class expl_1(tk.Tk, Functions):
 
         self.marco_2_1 = tk.Frame(self.marco_2)
 
-        if alfa == 90:
+        if alpha == 90:
             self.img_forces = tk.PhotoImage(file='forces_1.png')
-        elif alfa < 90:
+        elif alpha < 90:
             self.img_forces = tk.PhotoImage(file='forces_2.png')
-        elif alfa > 90:
+        elif alpha > 90:
             self.img_forces = tk.PhotoImage(file='forces_3.png')
 
         self.label_img_forces = tk.Label(self.marco_2_1, image=self.img_forces)
@@ -527,7 +529,7 @@ P и ȹ, поэтому мы приступаем к их поиску, ȹ мо�
         self.label_3 = tk.Label(self.marco_2_2, text=text_3, font='calibri 13')
         self.label_3.pack()
 
-        if alfa == 90:
+        if alpha == 90:
             eq_n = f'{chr(966)} = 180 - β'
         else:
             eq_n = f'{chr(966)} = 90 + α - β'
@@ -555,7 +557,7 @@ P и ȹ, поэтому мы приступаем к их поиску, ȹ мо�
 
 class expl_2(tk.Tk, Functions):
     def __init__(self):
-        global alfa, beta, teta, force_f, force_r
+        global alpha, beta, teta, force_f, force_r
         
         super().__init__()
 
@@ -574,11 +576,11 @@ class expl_2(tk.Tk, Functions):
 
         self.marco_2_1 = tk.Frame(self.marco_2)
 
-        if alfa == 90:
+        if alpha == 90:
             self.img_moment = tk.PhotoImage(file='moment_1.png')
-        elif alfa < 90:
+        elif alpha < 90:
             self.img_moment = tk.PhotoImage(file='moment_2.png')
-        elif alfa > 90:
+        elif alpha > 90:
             self.img_moment = tk.PhotoImage(file='moment_3.png')
 
         self.label_img_moment = tk.Label(self.marco_2_1, image=self.img_moment)
@@ -600,13 +602,13 @@ class expl_2(tk.Tk, Functions):
         self.label_1 = tk.Label(self.marco_2_2, text=text_1, font='calibri 13')
         self.label_1.pack()
 
-        if alfa == 90:
+        if alpha == 90:
             eq_1 = f'Mₐ: 0.5·l·F+l·P·cos(-(90+β)) = 0'
             eq_2 = f'0.5·F + P·cos(90+β) = 0 \nP·cos(90+β) = -0.5·F \nP = -F/(2·cos(90+β))'
-        elif alfa < 90:
+        elif alpha < 90:
             eq_1 = f'Mₐ: 0.5·l·F·cos(-δ₆)+l·P·cos(-(90+β))=0'
             eq_2 = f'0.5·F·cos(δ₆)+P·cos(90+β) = 0 \nP·cos(90+β) = -0.5·F·cos(δ₆) \nP = (-F·cos(δ₆))/(2·cos(90+β)) \nδ₆ = 90 - α'
-        elif alfa > 90:
+        elif alpha > 90:
             eq_1 = f'Mₐ: 0.5·l·F·cos(δ₅)+l·P·cos(-(90+β))=0'
             eq_2 = f'0.5·F·cos(δ₅) + P·cos(90+β) = 0 \nP·cos(90+β) = -0.5·F·cos(δ₅) \nP = (-F·cos(δ₅))/(2·cos(90+β)) \nδ₅ = α - 90'
 
@@ -642,7 +644,7 @@ class expl_2(tk.Tk, Functions):
 
 class expl_3(tk.Tk, Functions):
     def __init__(self):
-        global alfa, beta, teta, force_f, force_r
+        global alpha, beta, teta, force_f, force_r
         
         super().__init__()
 
@@ -650,7 +652,7 @@ class expl_3(tk.Tk, Functions):
 
         self.title('шаг_3')
 
-        r, t_ta, r_x, r_y = solve_problem(alfa, beta, force_f)
+        r, t_ta, r_x, r_y = solve_problem(alpha, beta, force_f)
 
         self.marco_1 = tk.Frame(self)
 
@@ -719,7 +721,7 @@ class expl_3(tk.Tk, Functions):
 
 class congra(tk.Tk, Functions):
     def __init__(self):
-        global alfa, beta, teta, force_f, force_r
+        global alpha, beta, teta, force_f, force_r
         
         super().__init__()
 
@@ -748,7 +750,7 @@ class congra(tk.Tk, Functions):
         self.button_m.config(cursor='hand2')
         self.button_m.place(rely=0.333, relx=0.47, relheight=0.333) 
 
-        self.button_ce = tk.Button(self.marco_2, text='закрыть', command=self.destroy, font='calibri 18')
+        self.button_ce = tk.Button(self.marco_2, text='закрыть', command=self.close_all, font='calibri 18')
         self.button_ce.config(cursor='hand2')
         self.button_ce.place(rely=0.333, relx=0.088, relheight=0.333)
         
@@ -758,16 +760,16 @@ class congra(tk.Tk, Functions):
 
 class make_draw(tk.Tk, Functions):
     def __init__(self):
-        global alfa, beta, force_f, force_r, teta
+        global alpha, beta, force_f, force_r, teta
         
         super().__init__()
         
         self.w_h_screen()
         
-        force_r, teta, _, _ = solve_problem(alfa, beta, force_f)
+        force_r, teta, _, _ = solve_problem(alpha, beta, force_f)
         
-        self.label_alfa = tk.Label(self, text=f'α = {alfa:.2f}°', font='courier 18 italic')
-        self.label_alfa.place(relx=0.025, rely=0.05)
+        self.label_alpha = tk.Label(self, text=f'α = {alpha:.2f}°', font='courier 18 italic')
+        self.label_alpha.place(relx=0.025, rely=0.05)
         
         self.label_beta = tk.Label(self, text=f'β = {beta:.2f}°', font='courier 18 italic')
         self.label_beta.place(relx=0.025, rely=0.13)
@@ -794,7 +796,7 @@ class make_draw(tk.Tk, Functions):
             self.canva.create_line(x-40, y+4, x-48, y+12, width=2, capstyle=tk.ROUND)
             self.canva.create_line(x-40, y+12, x-48, y+20, width=2, capstyle=tk.ROUND)
             
-        def create_angle(x, y, a_1, a_2, name, radius=70):
+        def create_angle(x, y, a_1, a_2, name, radius=70):  
             x_0, y_0 = x - radius, y - radius
             x_1, y_1 = x + radius, y + radius
             i_angle = a_1 + a_2/2
@@ -812,28 +814,28 @@ class make_draw(tk.Tk, Functions):
             self.canva.create_line(x_0, y_0, x_1, y_1, width=7, fill='red', arrow='last', capstyle=tk.ROUND)
             self.canva.create_text(x + 20, y, text=name, font='courier 18 italic')
             
-        alfa_r = math.radians(alfa)
+        alpha_r = math.radians(alpha)
         beta_r = math.radians(beta)
         
-        if alfa == 90:
+        if alpha == 90:
             ym_0 = math.tan(beta_r)
             xm_1 = 1
             ym_1 = 1
             h = 1 + ym_0
-        elif alfa < 90:
-            ym_0 = math.sin(beta_r)/math.sin(alfa_r-beta_r)
-            xm_1 = math.sin(alfa_r)
-            ym_1 = 1 - xm_1/math.tan(alfa_r)
+        elif alpha < 90:
+            ym_0 = math.sin(beta_r)/math.sin(alpha_r-beta_r)
+            xm_1 = math.sin(alpha_r)
+            ym_1 = 1 - xm_1/math.tan(alpha_r)
             h = 1 + ym_0
-        elif alfa > 90:
-            ym_0 = math.sin(beta_r)/math.sin(alfa_r-beta_r)
-            xm_1 = math.cos(alfa_r - math.pi/2)
-            ym_1 = 1 + math.sin(alfa_r - math.pi/2)
+        elif alpha > 90:
+            ym_0 = math.sin(beta_r)/math.sin(alpha_r-beta_r)
+            xm_1 = math.sin(alpha_r)
+            ym_1 = 1 + math.sin(alpha_r - math.pi/2)
             
-            if alfa - beta < 90:
+            if alpha - beta < 90:
                 h = 1 + ym_0
             else:
-                h = math.sin(alfa_r - math.pi/2) + 1
+                h = math.sin(alpha_r - math.pi/2) + 1
                 
         k = 585 / h
         
@@ -850,7 +852,7 @@ class make_draw(tk.Tk, Functions):
         xm_0 = o_x
         ym_0 = o_y - (k + ym_0)
         
-        _, _, teta_x, teta_y = solve_problem(alfa, beta, force_f)
+        _, _, teta_x, teta_y = solve_problem(alpha, beta, force_f)
         teta_x = teta_x*5 + k_x
         
         teta_y = k_y - teta_y*5
@@ -869,24 +871,24 @@ class make_draw(tk.Tk, Functions):
         create_tringle(k_x, k_y)
         create_tringle(xm_0, ym_0)
         
-        create_angle(k_x, k_y, -90, alfa, 'α')
+        create_angle(k_x, k_y, -90, alpha, 'α')
         
         create_force(p_x_f, p_y_f, p_x_f, p_y_f + (force_f*5), 'F')
         create_force(k_x, k_y, teta_x, teta_y, 'R')
         
-        if alfa == 90:
+        if alpha == 90:
             create_angle(xm_1 , ym_1, 180, -beta, 'β')
-        elif alfa > 90:
-            create_angle(xm_1 , ym_1, alfa-270, -beta, 'β')
-        elif alfa < 90:
-            create_angle(xm_1 , ym_1, 90+alfa, -beta, 'β')
+        elif alpha > 90:
+            create_angle(xm_1 , ym_1, alpha-270, -beta, 'β')
+        elif alpha < 90:
+            create_angle(xm_1 , ym_1, 90+alpha, -beta, 'β')
             
         self.canva.place(x=290, y=5)
         
         self.buton = tk.Button(self, text='назад', command=self.go_back_funcion, font='calibri 18')
         self.buton.place(relx=0.85, rely=0.85)
         
-        self.buton_c = tk.Button(self, text='закрыть',command=self.destroy, font='calibri 18')
+        self.buton_c = tk.Button(self, text='закрыть',command=self.close_all, font='calibri 18')
         self.buton_c.place(relx=0.04, rely=0.85)
         
 # ===========================================================================================================
