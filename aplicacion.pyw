@@ -1,6 +1,5 @@
 # ======================================================================================= necessary libraries
 import tkinter as tk
-import turtle as tr
 import math
 import tkinter.messagebox as tkm
 # ====================================================================================================== bugs
@@ -196,7 +195,6 @@ class Functions():
         count_2 = 0
         v_1 = False
         v_2 = False
-        v_3 = False
         valuar = False
 
         rect_alpha = str(self.input_alpha.get())
@@ -229,16 +227,13 @@ class Functions():
         else:
             force_r = 0
 
-        if beta < alpha:
+        if 0 < beta < alpha < 180:
             v_1 = True
 
         if force_f > 0:
             v_2 = True
-
-        if 0 < alpha < 180:
-            v_3 = True
             
-        if (v_1 == True) and (v_2 == True) and (v_3 == True):
+        if (v_1 == True) and (v_2 == True):
             valuar = True
         
         return valuar, count_1, count_2
@@ -274,7 +269,7 @@ class Functions():
         self.geometry(f'{width_window}x{height_window}+{x}+{y-40}')
     
     def calculate(self):
-        global alpha, beta, teta, force_f, force_r, rect_alpha, rect_beta, rect_f
+        global alpha, beta, teta, force_f, force_r
         
         valuar, count_1, count_2 = self.rect_values_in_window()
  
@@ -766,7 +761,7 @@ class make_draw(tk.Tk, Functions):
         self.label_teta = tk.Label(self, text=f'θ = {teta:.2f}°', font='courier 18 italic')
         self.label_teta.place(relx=0.025, rely=0.37)
         
-        self.canva = tk.Canvas(self, width=700, height=590)
+        self.canva = tk.Canvas(self, width=2000, height=1000)
         
         def create_tringle(x, y, k=4):
             self.canva.create_line(x, y, x-40, y+20, width=k, fill='black', capstyle=tk.ROUND)
