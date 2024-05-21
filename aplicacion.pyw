@@ -744,6 +744,8 @@ class make_draw(tk.Tk, Functions):
         
         self.w_h_screen()
         
+        self.title('рисунок')
+        
         force_r, teta, _, _ = solve_problem(alpha, beta, force_f)
         
         self.label_alpha = tk.Label(self, text=f'α = {alpha:.2f}°', font='courier 18 italic')
@@ -868,7 +870,7 @@ class make_draw(tk.Tk, Functions):
         
         self.buton_c = tk.Button(self, text='закрыть',command=self.close_all, font='calibri 18')
         self.buton_c.place(relx=0.04, rely=0.85)
-        
+
 # ===========================================================================================================
 
 if __name__ == '__main__':
