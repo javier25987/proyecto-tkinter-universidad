@@ -784,7 +784,7 @@ class make_draw(tk.Tk, Functions):
             i_angle = math.radians(i_angle)
             x_n, y_n = x + radius*math.cos(i_angle), y - radius*math.sin(i_angle)
             
-            self.canva.create_arc(x_0, y_0, x_1, y_1, start=a_1, extent=a_2, width=3)
+            self.canva.create_arc(x_0, y_0, x_1, y_1, start=a_1, extent=a_2, width=3, style='arc')
             self.canva.create_text(x_n, y_n, text=name, font='courier 18 italic')
             
         def create_force(x_0, y_0, x_1, y_1, name):
@@ -852,6 +852,7 @@ class make_draw(tk.Tk, Functions):
         create_tringle(xm_0, ym_0)
         
         create_angle(k_x, k_y, -90, alpha, 'α')
+        create_angle(k_x, k_y, 90, -teta, 'θ', (force_r*5) - 15)
         
         create_force(p_x_f, p_y_f, p_x_f, p_y_f + (force_f*5), 'F')
         create_force(k_x, k_y, teta_x, teta_y, 'R')
