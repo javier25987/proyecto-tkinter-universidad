@@ -129,7 +129,7 @@ def error_window():
             
     mensage += 'пожалуйста, введите параметры снова.'
 
-    tkm.showwarning(message=mensage, title='предупреждение')
+    tkm.showwarning(message=mensage, title='Предупреждение')
 
 class Functions():
     def __init__(self):
@@ -187,6 +187,13 @@ class Functions():
         
     def close_all(self):
         self.destroy()
+        
+    def button_info(self):
+        mensage = '''Если данные параметры указаны правильно, программа показывает решение.\n
+Если помимо параметров указан ответ, то программа сначала решает проблему с параметрами и затем сравнивает ответы. 
+В том случае, если ответ правилен, программа поздравляет. Если ответ неверен, программа показывает решение.\n
+Для программы правильным считается ответ до сотых. Если сотые числа совпадают,ответ будет засчитан за верный.'''
+        tkm.showinfo('Подсказка', mensage)
         
     def rect_values_in_window(self):
         global alpha, beta, teta, force_f, force_r, rect_alpha, rect_beta, rect_f
@@ -299,22 +306,25 @@ class firsh_window(tk.Tk, Functions):
 
         self.w_h_screen_firsh()
 
-        self.title('главное меню')
+        self.title('Условия Задачи')
 
         self.marco_1 = tk.Frame(self)
 
-        text_problem = '''Однородный стержень AB прикреплен к вертикальной
-стене  посредством  шарнира  A и удерживается под 
-углом 60° к вертикали при помощи троса BC,
-образующего с ним угол 30°. Определить величину 
-и направление реакции R шарнира, если известно, 
-что вес стержня равен 20 Н.'''
+        text_problem = '''
+Однородный стержень AB прикреплен к вер-
+тикальной стене посредством шарнира A и 
+удерживается под углом 60° к вертикали 
+при помощи троса BC, образующего с ним 
+угол 30°. Определить величину и направле-
+ние реакции R шарнира, если известно, что 
+вес стержня равен 20 Н.'''
 
-        self.label_p = tk.Label(self.marco_1, text='условия задачи:', font='calibri 20')
-        self.label_p.place(relx=0.016, rely=0.08)
+        self.canva_text = tk.Canvas(self.marco_1, width=500, height=600)
         
-        self.label = tk.Label(self.marco_1, text=text_problem, font='calibri 17')
-        self.label.place(relx=0.016, rely=0.16)
+        self.canva_text.create_text(270, 150, text=text_problem, font='calibri 18')
+        self.canva_text.create_text(140, 40, text='Условия Задачи:', font='calibri 23')
+        
+        self.canva_text.place(x=0, y=0)
 
         self.button = tk.Button(self.marco_1, text='начать', command=self.go_menu, font='calibri 25')
         self.button.config(cursor='hand2')
@@ -340,7 +350,7 @@ class menu(tk.Tk, Functions):
 
         self.w_h_screen()
 
-        self.title('меню')
+        self.title('Меню')
 
         self.marco_1 = tk.Frame(self)
 
@@ -423,7 +433,12 @@ class menu(tk.Tk, Functions):
         self.button_ce = tk.Button(self.marco_a_2, text='закрыть', command=self.close_all, font='calibri 18')
         self.button_ce.config(cursor='hand2')
         self.button_ce.place(rely=0, relx=0.1, relheight=1)
-
+        
+        self.button_inf = tk.Button(self.marco_a_2, text='?', command=self.button_info, font='calibri 18')
+        self.button_inf.config(cursor='hand2')
+        self.button_inf.config(borderwidth=0)
+        self.button_inf.place(rely=0, relx=0.93, relheight=1)
+        
         self.marco_2.place(rely=0.25, relx=0, relheight=0.2, relwidth=1)
 
         self.marco_a_2.place(rely=0.15, relx=0, relheight=0.296, relwidth=1)
@@ -450,7 +465,7 @@ class expl_1(tk.Tk, Functions):
 
         self.w_h_screen()
 
-        self.title('шаг_1')
+        self.title('Шаг_1')
 
         self.marco_1 = tk.Frame(self)
 
@@ -541,7 +556,7 @@ class expl_2(tk.Tk, Functions):
 
         self.w_h_screen()
 
-        self.title('шаг_2')
+        self.title('Шаг_2')
 
         self.marco_1 = tk.Frame(self)
 
@@ -628,7 +643,7 @@ class expl_3(tk.Tk, Functions):
 
         self.w_h_screen()
 
-        self.title('шаг_3')
+        self.title('Шаг_3')
 
         r, t_ta, r_x, r_y = solve_problem(alpha, beta, force_f)
 
@@ -705,7 +720,7 @@ class congra(tk.Tk, Functions):
 
         self.w_h_screen()
 
-        self.title('поздравления')
+        self.title('Поздравления')
 
         self.marco_1 = tk.Frame(self)
 
@@ -744,7 +759,7 @@ class make_draw(tk.Tk, Functions):
         
         self.w_h_screen()
         
-        self.title('рисунок')
+        self.title('Рисунок')
         
         force_r, teta, _, _ = solve_problem(alpha, beta, force_f)
         
